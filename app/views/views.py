@@ -1,6 +1,7 @@
 from flask import Flask, request
-from flask_restplus import Resource, Api, fields
 from ..models.rides import rides
+from flask_restplus import Resource, Api, fields
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -11,7 +12,7 @@ new_ride = api.model('new_ride',{
     'name': fields.String("Name"),
     'capacity': fields.Integer("capacity"),
     'time': fields.String("time"),
-    'day': fields.String("day"),
+    'date': fields.String("day"),
     'month': fields.String("month"),
     'year': fields.Integer("year"),
     'pick up point': fields.String("pick up point"),
@@ -57,6 +58,6 @@ class ride_requests(Resource):
         rideId =int(rideId)
         if obj.fetch_one(rideId,obj.all_ride) == True:
             obj.all_request.append(request.get_json())
-            return({'result':'uploaded'})
+            return({'result':'uploaded'}),201
         else:
             return({'result':'not found'}),404

@@ -26,10 +26,15 @@ class rides:
 	
 	def fetch_one(self,id,items):
 		index = 0
-		while (index < len(items)):
-			if int(id) == items[index]['id']:
-				return True
-			index = index + 1
+		if id < 0:
+			return False
+		elif id > len(items):
+			return False
+		else:
+			while(index < len(items)):
+				if int(id) == index:
+					return True
+				index = index +1
 		
 
 	def request_ride(self,id,name,time,destination,pickup,items):
@@ -47,7 +52,7 @@ class rides:
 				return False
 			if id > len(items):
 				return False
-			if id == items[index]['id']:
+			if id == index:
 				data['ride id'] = items[index]['id']
 				self.all_request.append(data)
 				return True
@@ -55,8 +60,8 @@ class rides:
 
 """obj = rides()
 obj.add_ride('one','yesy','yesy','yesy','yesy','yesy','yesy','yesy','sd')
-
+print(obj.all_ride[0])
 print(obj.fetch_all(obj.all_ride))
 print(obj.fetch_one(0,obj.all_ride))
-print(obj.request_ride(0,'name','time','destination','pickup',obj.all_ride))
+print(obj.request_ride(3,'name','time','destination','pickup',obj.all_ride))
 """
