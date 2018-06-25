@@ -35,15 +35,15 @@ class viewsTest(unittest.TestCase):
 		response = self.test.post('/rides',data=json.dumps(self.post_ride),headers = self.headers)
 		response = self.test.get('/rides',headers = self.headers)
 		self.assertEqual(response.status_code,200)
-		self.assertTrue('name' in response.data)
-		self.assertTrue('capacity' in response.data)
-		self.assertTrue('time' in response.data)
-		self.assertTrue('date' in response.data)
-		self.assertTrue('month' in response.data)
-		self.assertTrue('year' in response.data)
-		self.assertTrue('pick up point' in response.data)
-		self.assertTrue('destination' in response.data)
-		self.assertTrue('contact' in response.data)
+		self.assertIn('name', response.data)
+		self.assertIn('capacity', response.data)
+		self.assertIn('time', response.data)
+		self.assertIn('date', response.data)
+		self.assertIn('month', response.data)
+		self.assertIn('year', response.data)
+		self.assertIn('pick up point', response.data)
+		self.assertIn('destination', response.data)
+		self.assertIn('contact', response.data)
 
 	def test_ridePost(self):
 		response = self.test.post('/rides',data=json.dumps(self.post_ride),headers = self.headers)
@@ -54,33 +54,31 @@ class viewsTest(unittest.TestCase):
 		response = self.test.get('/rides/0',headers =self.headers)
 		self.assertEqual(response.status_code,200)
 		self.assertEqual(response.status_code,200)
-		self.assertTrue('name' in response.data)
-		self.assertTrue('capacity' in response.data)
-		self.assertTrue('time' in response.data)
-		self.assertTrue('date' in response.data)
-		self.assertTrue('month' in response.data)
-		self.assertTrue('year' in response.data)
-		self.assertTrue('pick up point' in response.data)
-		self.assertTrue('destination' in response.data)
-		self.assertTrue('contact' in response.data)
+		self.assertIn('name', response.data)
+		self.assertIn('capacity', response.data)
+		self.assertIn('time', response.data)
+		self.assertIn('date', response.data)
+		self.assertIn('month', response.data)
+		self.assertIn('year', response.data)
+		self.assertIn('pick up point', response.data)
+		self.assertIn('destination', response.data)
+		self.assertIn('contact', response.data)
 
 	def test_single_rideNot(self):
 		response = self.test.get('/rides/-2',headers =self.headers)
 		self.assertEqual(response.status_code,404)
-		self.assertTrue('not found' in response.data)
+		self.assertIn('not found', response.data)
 
 	def test_ride_request(self):
 		response =self.test.post('/rides/0/requests',data = json.dumps(self.post_request),headers = self.headers)
 		self.assertEqual(response.status_code,201)
-		self.assertTrue('name',response.data)
-		self.assertTrue('pickup time',response.data)
-		self.assertTrue('destination',response.data)
-		self.assertTrue('pick up point',response.data)
+		self.assertIn('uploaded',response.data)
+
 
 	def test_ride_requestNot(self):
 		response =self.test.post('/rides/-3/requests',data = json.dumps(self.post_request),headers = self.headers)
 		self.assertEqual(response.status_code,404)
-		self.assertTrue('not found' in response.data)
+		self.assertIn('not found', response.data)
 
 	#test data 
 	
