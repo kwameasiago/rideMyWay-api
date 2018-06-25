@@ -38,7 +38,7 @@ class rides(Resource):
     @api.expect(new_ride)
     def post(self):
         obj.all_ride.append(request.get_json())
-        return {'status':'Ride uploaded'}, 201
+        return {'result':'Ride uploaded'}, 201
 
 
 @api.route('/rides/<rideId>')
