@@ -2,29 +2,39 @@ class rides:
 	def __init__(self):
 		self.all_ride = []
 		self.all_request = []
-	def add_ride(self,username,car_capacity,contact,time,date,month,year,destination,pickup):
+
+	def add_ride(self,
+		username,
+		car_capacity,
+		contact,
+		time,
+		date,
+		month,
+		year,
+		destination,
+		pickup):
 		data = {
-		'username':username,
-		'car capacity':car_capacity,
-		'contact':contact,
-		'time':time,
-		'date':date,
-		'month':month,
-		'year':year,
+		'username': username,
+		'car capacity': car_capacity,
+		'contact': contact,
+		'time': time,
+		'date': date,
+		'month': month,
+		'year': year,
 		'destination': destination,
-		'pickup':pickup,
+		'pickup': pickup
 		}
 		data['id'] = len(self.all_ride)
 		self.all_ride.append(data)
 		return True
-	
-	def fetch_all(self,items):
+
+	def fetch_all(self, items):
 		if len(items) > 0:
 			return True
 		else:
 			return False
-	
-	def fetch_one(self,id,items):
+
+	def fetch_one(self, id, items):
 		index = 0
 		if id < 0:
 			return False
@@ -34,20 +44,19 @@ class rides:
 			while(index < len(items)):
 				if int(id) == index:
 					return True
-				index = index +1
-		
+				index = index + 1
 
-	def request_ride(self,id,name,time,destination,pickup,items):
-		index=0
-		data ={
-		'name':name,
-		'time':time,
-		'destination':destination,
-		'pickup':pickup,
-		'id':len(self.all_request)+1
+	def request_ride(self, id, name, time, destination, pickup, items):
+		index = 0
+		data = {
+		'name': name,
+		'time': time,
+		'destination': destination,
+		'pickup': pickup,
+		'id': len(self.all_request) + 1
 		}
 
-		while (index<len(items)):
+		while (index < len(items)):
 			if id < 0:
 				return False
 			if id > len(items):
@@ -56,7 +65,7 @@ class rides:
 				data['ride id'] = items[index]['id']
 				self.all_request.append(data)
 				return True
-			index=index+1
+			index = index + 1
 
 """obj = rides()
 obj.add_ride('one','yesy','yesy','yesy','yesy','yesy','yesy','yesy','sd')
