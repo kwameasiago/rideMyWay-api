@@ -66,7 +66,7 @@ class viewsTest(unittest.TestCase):
 	def test_all_data(self):
 		"""
 
-		test response when no rides are avialable and when there are available ride
+		test response when no rides are avialable and when there are available rides
 		"""
 		response = self.test.get('/rides', headers=self.headers)
 		self.assertEqual(response.status_code, 404)
