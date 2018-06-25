@@ -11,6 +11,7 @@ script:
   - nosetests --exe -v
   - nosetests --exe --with-coverage --cover-package=api
   - "coveralls"
+  - py.test 
 
 after_success:
 - "coveralls"
