@@ -1,17 +1,16 @@
 language: python
 
 python:
-  - "2.7.12"
-  - "3.5.2"
+  - "3.6"
 
 install:
   - pip install -r requirements.txt
+  - pip install coveralls
 
-script:
-  - nosetests --exe -v
-  - nosetests --exe --with-coverage --cover-package=api
-  - "coveralls"
-  - py.test 
+script: 
+  - pytest --cov-report term-missing --cov=app
 
 after_success:
-- "coveralls"
+  - coveralls
+
+cache: pip
