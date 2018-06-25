@@ -1,10 +1,16 @@
 language: python
+
 python:
   - "2.7.12"
-  - "3.5.2"  # 3.7 development branch
-# command to install dependencies
+  - "3.5.2"
+
 install:
   - pip install -r requirements.txt
-# command to run tests
+
 script:
-  - pytest # or py.test for Python versions 3.5 and below
+  - nosetests --exe -v
+  - nosetests --exe --with-coverage --cover-package=api
+  - "coveralls"
+
+after_success:
+- "coveralls"
