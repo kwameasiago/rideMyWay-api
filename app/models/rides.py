@@ -66,11 +66,3 @@ class rides:
 				self.all_request.append(data)
 				return True
 			index = index + 1
-
-"""obj = rides()
-obj.add_ride('one','yesy','yesy','yesy','yesy','yesy','yesy','yesy','sd')
-print(obj.all_ride[0])
-print(obj.fetch_all(obj.all_ride))
-print(obj.fetch_one(0,obj.all_ride))
-print(obj.request_ride(3,'name','time','destination','pickup',obj.all_ride))
-"""
