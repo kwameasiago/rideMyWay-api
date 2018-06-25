@@ -28,4 +28,6 @@ Drivers can either accept or reject a ride request.
 Tests
 The test were carried out from the unittest library.
 
-Screenshots  
+[![Coverage Status](https://coveralls.io/repos/github/SelaDanti/rideMyWay-api/badge.svg?branch=master)](https://coveralls.io/github/SelaDanti/rideMyWay-api?branch=master)
+
+[![Build Status](https://travis-ci.org/SelaDanti/rideMyWay-api.svg?branch=api-v2-ride-158598508)](https://travis-ci.org/SelaDanti/rideMyWay-api)
