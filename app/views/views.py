@@ -11,9 +11,7 @@ app.config.from_pyfile('../../config.py')
 class rides(Resource):
     def get(self):
         pass
-
-
-    @api.expect(new_ride)
+        
     def post(self):
         pass
 
@@ -26,6 +24,5 @@ class rides_id(Resource):
 
 @api.route('/rides/<rideId>/requests')
 class ride_requests(Resource):
-    @api.expect(ride_request)
     def post(self, rideId):
         pass
