@@ -1,5 +1,4 @@
 from flask import Flask, request
-from ..models.rides import rides
 from flask_restplus import Resource, Api, fields
 
 
