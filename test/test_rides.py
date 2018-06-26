@@ -6,302 +6,612 @@ from app.views.views import app
 class viewsTest(unittest.TestCase):
 	def setUp(self):
 		"""
-
 		set up instances
 		"""
 		self.test = app.test_client(self)
 		self.headers = {'Content-type': 'application/json'}
 		self.post_ride = {
-		'username': 'kwame',
-		'capacity': 1,
-		'time': '12:30pm',
-		'date': 12,
-		'month': 'june',
-		'year': 2018,
-		'pick up point': 'kasarani',
-		'destination': 'mwiki',
-		'contact': '072346582',
-		'email': 'kwame@gmail.com'
+		"username": "string",
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string@gmail.com"
 		}
 
-		self.post_ride_err = {
-		'hsj': 'kwame',
-		'capdsaacity': 1,
-		'timeda': '12:30pm',
-		'dateda': 12,
-		'montdh': 'june',
-		'yeasrs': 2018,
-		'picsk up point': 'kasarani',
-		'destscination': 'mwiki',
-		'contacsdcat': '072346582',
-		'email': 'kwame@gmail.com'
-		}
 
 		self.post_request = {
-		'username': 'kwame',
-		'pickup time': '12:30',
-		'destination': 'kasarani',
-		'pick up point': 'mwiki',
-		}
-
-		self.post_request_err = {
-		'nssame': 'kwame',
-		'pickssup time': '12:30',
-		'destination': 'kasarani',
-		'pick up point': 'mwiki',
+		"username": "",
+		"pick_up_point": "string",
+		"destination": "string",
+		"pick_up_time": " s "
 		}
 
 	def tearDown(self):
 		"""
-
 		Realese flask app instances
 		"""
 		self.test = None
 		self.headers = None
 		self.post_ride = None
-		self.post_ride_err = None
-		self.post_request = None
-		self.post_request_err = None
 
-	def test_all_data(self):
-		"""
 
-		test response when no rides are avialable and when there are available rides
+	def test_no_ride(self):
 		"""
-		response = self.test.get('/rides', headers=self.headers)
-		self.assertEqual(response.status_code, 404)
-		self.assertIn('There are no new rides', response.data)
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		response = self.test.get('/rides', headers=self.headers)
-		self.assertEqual(response.status_code, 200)
+		Test status code when there are no rides
+		"""
+		response =self.test.get('/rides',headers=self.headers)
+		self.assertEqual(response.status_code,404)
+
+	def test_no_rideMessage(self):
+		"""
+		test the message when no rides are available
+		"""
+		response =self.test.get('/rides',headers=self.headers)
+		self.assertIn('There are no new rides',response.data)
 
 	def test_single_data(self):
 		"""
-		test if ride account exist or not
+		test when ride account does not exist
 		"""
-		response = self.test.get('/ride/-3', headers=self.headers)
-		self.assertEqual(response.status_code, 404)
-		self.assertIn('not found', response.data)
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		response = self.test.get('/rides/0', headers=self.headers)
-		self.assertEqual(response.status_code, 200)
+		response = self.test.get('/rides/-34',headers=self.headers)
+		self.assertEqual(response.status_code,404)
+		self.assertIn('invalid ride id',response.data)
+
+	def test_single_dataFound(self):
+		"""
+		test when ride account exist
+		"""
+		response = self.test.post('/rides',
+			data=json.dumps(self.post_ride),headers=self.headers)
+		response2 = self.test.get('rides/0',headers=self.headers)
+		self.assertEqual(response2.status_code,200)
+		self.assertIn('username',response2.data)
 
 	def test_post_ride(self):
-		""" 
-		test of post returns 201 status code
 		"""
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		self.assertEqual(response.status_code, 201)
+		test for when posting a ride
+		"""
+		response = self.test.post('/rides',
+			data=json.dumps(self.post_ride),headers=self.headers)
+		self.assertEqual(response.status_code,201)
+		self.assertIn('Content Uploaded',response.data)
 
 	def test_post_keys(self):
 		"""
-		test if user inserts an incorrect json format
+		test for when posting with the wrong keys
 		"""
-		incorrect_json = {'cow': 'milk'}
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(incorrect_json),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(data['result'], 'Incorrect key(s) used')
-		self.assertEqual(response.status_code, 400)
-
-	def test_ride_stringData(self):
-		"""
-		test if user enters a string where"""
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride_err),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(
-			data['result'],
-			'Incorrect data type. Item should be a string')
-		self.assertEqual(response.status_code, 400)
-
-	def test_ride_intData(self):
-		"""
-		test for interger values
-		"""
-		self.post_ride['year'] = '123445'
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(
-			data['result'],
-			'Incorrect data type. Item should be an Int')
-		self.assertEqual(response.status_code, 400)
-
-	def test_ride_email1(self):
-		"""
-		test for correct email format
-		"""
-		self.post_ride['email'] = 'asw.com'
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(data['result'], 'Incorrect email format')
-		self.assertEqual(response.status_code, 400)
-
-	def test_ride_email2(self):
-		"""
-		test for correct email format
-		"""
-		self.post_ride['email'] = '@.'
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(data['result'], 'Incorrect email format')
-		self.assertEqual(response.status_code, 400)
-
-	def test_ride_email3(self):
-		"""
-		test for correct email format
-		"""
-		self.post_ride['email'] = 'qwee@.'
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(data['result'], 'Incorrect email format')
-		self.assertEqual(response.status_code, 400)
+		post_ride = {
+		"usernamer": 'sad',
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "strng",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers=self.headers)
+		self.assertEqual(response.status_code,403)
+		self.assertIn('Incorrect key(s) used',response.data)
+	
 
 	def test_post_ride_same_points(self):
 		"""
-		test whether the desitnation and the pick up point are the same
+		test for when the pick up point and the destination are the same
 		"""
-		self.post_ride['pick up point'] = 'mwiki'
-		self.post_ride['destination'] = 'mwiki'
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(
-			data['result'],
-			'destination and pick up point are identical')
-		self.assertEqual(response.status_code, 400)
+		post_ride = {
+		"username": 'sad',
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "string",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('destination and pick up point are identical',response.data)
+		self.assertEqual(response.status_code,403)
 
-	def test_empty_ride(self):
+	def test_empty_username(self):
 		"""
-		test  all the fields are not empty 
+		test for when user post empty data
 		"""
-		self.post_ride['username'] = ''
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(data['result'], 'All the fields are required')
-		self.assertEqual(response.status_code, 405)
+		post_ride = {
+		"username": '',
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)
 
-	def test_ride_space_only(self):
+	def test_empty_destination(self):
 		"""
-		test if user post only spaces
+		test for when user post empty data
 		"""
-		self.post_ride['username'] = '   '
-		response=self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(response.status_code,405)
-		self.assertIn(data['result'],'Input not allowed')
+		post_ride = {
+		"username": "kwam",
+		"capacity": 10,
+		"destination": "",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)	
 
-	def test_ride_date(self):
+	def test_empty_month(self):
 		"""
-		test if the date of the ride is current
+		test for when user post empty data
 		"""
-		self.post_ride['year'] = 1992
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(data['result'], 'Incorrect date')
-		self.assertEqual(response.status_code, 400)
+		post_ride = {
+		"username": "kwa",
+		"capacity": 10,
+		"destination": "string",
+		"month": "",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)
 
+	def test_empty_pickup(self):
+		"""
+		test for when user post empty data
+		"""
+		post_ride = {
+		"username": "sadd",
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_empty_time(self):
+		"""
+		test for when user post empty data
+		"""
+		post_ride = {
+		"username": 'ssss',
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "sting",
+		"time": "",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_empty_date(self):
+		"""
+		test for when user post empty data
+		"""
+		post_ride = {
+		"username": 'ssss',
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_empty_email(self):
+		"""
+		test for when user post empty data
+		"""
+		post_ride = {
+		"username": 'ssd',
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": ""
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_correct_email(self):
+		"""
+		test for when user post empty data
+		"""
+		post_ride = {
+		"username": 'ssd',
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "sas"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Incorrect Email',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_correct_email2(self):
+		"""
+		test for when user post empty data
+		"""
+		post_ride = {
+		"username": 'ssd',
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "@."
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Incorrect Email',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_ride_space_only_username(self):
+		"""
+		test when posting only white space
+		"""
+		post_ride = {
+		"username": '    ',
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_ride_space_only_destination(self):
+		"""
+		test when posting only white space
+		"""
+		post_ride = {
+		"username": "sdad",
+		"capacity": 10,
+		"destination": "    ",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_ride_space_only_month(self):
+		"""
+		test when posting only white space
+		"""
+		post_ride = {
+		"username": "sdad",
+		"capacity": 10,
+		"destination": "mwiki",
+		"month": "   ",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_ride_space_only_pickup(self):
+		"""
+		test when posting only white space
+		"""
+		post_ride = {
+		"username": "sdad",
+		"capacity": 10,
+		"destination": "mwiki",
+		"month": "kas",
+		"pickup": "   ",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_ride_space_only_time(self):
+		"""
+		test when posting only white space
+		"""
+		post_ride = {
+		"username": "sdad",
+		"capacity": 10,
+		"destination": "mwiki",
+		"month": "june",
+		"pickup": "sting",
+		"time": "   ",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_ride_space_only_date(self):
+		"""
+		test when posting only white space
+		"""
+		post_ride = {
+		"username": "sdad",
+		"capacity": 10,
+		"destination": "mwiki",
+		"month": "dsa",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": " ",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_ride_space_only_email(self):
+		"""
+		test when posting only white space
+		"""
+		post_ride = {
+		"username": "sdad",
+		"capacity": 10,
+		"destination": "mwiki",
+		"month": "sad",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "  "
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+
+
+
+	def test_ride_year(self):
+		post_ride = {
+		"username": 'kwwame',
+		"capacity": 10,
+		"destination": "string",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2017,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Incorrect year',response.data)
+		self.assertEqual(response.status_code,403)
 
 	def test_post_request(self):
-		""" 
-		test status code for ride is found an when it is not
-		"""
-		response = self.test.post(
-			'/rides/-4/requests',
-			data=json.dumps(self.post_request),
-			headers=self.headers)
-		self.assertEqual(response.status_code, 404)
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride), headers=self.headers)
-		response = self.test.post(
-			'/rides/0/requests',
-			data=json.dumps(self.post_request), headers=self.headers)
-		self.assertEqual(response.status_code, 201)
+		response = self.test.post('/rides/-4/requests',
+			data=json.dumps(self.post_request),headers = self.headers)
+		self.assertIn('invalid ride id',response.data)
+		self.assertEqual(response.status_code,404)
 
-	def test_empty_request(self):
-		"""
-		test if fields are emprty
-		"""
-		self.post_request['username'] = ''
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		response = self.test.post(
-			'/rides/-4/requests',
-			data=json.dumps(self.post_request),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(data['result'], 'All the fields are required')
-		self.assertEqual(response.status_code, 405)
-
-	def test_request_space_only(self):
-		"""
-		test if user post only spaces
-		"""
-		self.post_request['username'] = '   '
-		response = self.test.post(
-			'/rides',
-			data = json.dumps(self.post_request),
-			headers = self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(response.status_code, 405)
-		self.assertEqual(data['result'], 'Input not allowed')
+	def test_ride_capacity(self):
+		post_ride = {
+		"username": 'kwwame',
+		"capacity": 0,
+		"destination": "string",
+		"month": "June",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Incorrect capacity',response.data)
+		self.assertEqual(response.status_code,403)
 
 
-	def test_request_same_point(self):
-		"""
-		test if destination and pick up points are alike
-		"""
-		self.post_request['destination'] = 'mwiki'
-		self.post_request['pick up point'] = 'mwiki'
-		response = self.test.post(
-			'/rides',
-			data=json.dumps(self.post_ride),
-			headers=self.headers)
-		response = self.test.post(
-			'/rides/-4/requests',
-			data=json.dumps(self.post_request),
-			headers=self.headers)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(
-			data['result'],
-			'destination and pick up point are identical')
-		self.assertEqual(response.status_code, 400)
+	def test_ride_month(self):
+		post_ride = {
+		"username": 'kwwame',
+		"capacity": 20,
+		"destination": "string",
+		"month": "asad",
+		"pickup": "sting",
+		"time": "string",
+		"year": 2018,
+		"date": "string",
+		"email": "string"
+		}
+		response = self.test.post('/rides',
+			data=json.dumps(post_ride),headers = self.headers)
+		self.assertIn('Incorrect Month',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_post_request(self):
+		response = self.test.post('/rides/-4/requests',
+			data=json.dumps(self.post_request),headers = self.headers)
+		self.assertIn('invalid ride id',response.data)
+		self.assertEqual(response.status_code,404)
+
+	def test_empty_request_username(self):
+		post_request = {
+		"username": "",
+		"pick_up_point": "string",
+		"destination": "string",
+		"pick_up_time": "dsas"
+		}
+		response = self.test.post('/rides/0/requests',
+			data=json.dumps(post_request),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_empty_request_pickup(self):
+		post_request = {
+		"username": "",
+		"pick_up_point": "  ",
+		"destination": "string",
+		"pick_up_time": "sadd"
+		}
+		response = self.test.post('/rides/0/requests',
+			data=json.dumps(post_request),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_empty_request_destination(self):
+		post_request = {
+		"username": "sda",
+		"pick_up_point": "string",
+		"destination": "",
+		"pick_up_time": "dsadsa"
+		}
+		response = self.test.post('/rides/0/requests',
+			data=json.dumps(post_request),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_empty_request_time(self):
+		post_request = {
+		"username": "sda",
+		"pick_up_point": "string",
+		"destination": "",
+		"pick_up_time": ""
+		}
+		response = self.test.post('/rides/0/requests',
+			data=json.dumps(post_request),headers = self.headers)
+		self.assertIn('All the fields are required',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_whitespace_request_username(self):
+		post_request = {
+		"username": "  ",
+		"pick_up_point": "string",
+		"destination": "string",
+		"pick_up_time": "adxs"
+		}
+		response = self.test.post('/rides/0/requests',
+			data=json.dumps(post_request),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_whitespace_request_pickup(self):
+		post_request = {
+		"username": "dsad",
+		"pick_up_point": "    ",
+		"destination": "string",
+		"pick_up_time": "adxs"
+		}
+		response = self.test.post('/rides/0/requests',
+			data=json.dumps(post_request),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_whitespace_request_destination(self):
+		post_request = {
+		"username": "sdad",
+		"pick_up_point": "string",
+		"destination": "  ",
+		"pick_up_time": "adxs"
+		}
+		response = self.test.post('/rides/0/requests',
+			data=json.dumps(post_request),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_whitespace_request_time(self):
+		post_request = {
+		"username": "sda",
+		"pick_up_point": "string",
+		"destination": "string",
+		"pick_up_time": "  "
+		}
+		response = self.test.post('/rides/0/requests',
+			data=json.dumps(post_request),headers = self.headers)
+		self.assertIn('Input not allowed.white space Error',response.data)
+		self.assertEqual(response.status_code,403)
+
+	def test_request_same_points(self):
+		post_request = {
+		"username": "dasd",
+		"pick_up_point": "string",
+		"destination": "string",
+		"pick_up_time": " s "
+		}
+		response = self.test.post('/rides/0/requests',
+			data=json.dumps(post_request),headers = self.headers)
+		self.assertIn('destination and pick up point are identical',response.data)
+		self.assertEqual(response.status_code,403)
