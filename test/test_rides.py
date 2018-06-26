@@ -209,7 +209,20 @@ class viewsTest(unittest.TestCase):
 			headers=self.headers)
 		data = json.loads(response.get_data().decode('utf-8'))
 		self.assertEqual(data['result'], 'All the fields are required')
-		self.assertEqual(response.status_code, 400)
+		self.assertEqual(response.status_code, 405)
+
+	def test_ride_space_only(self):
+		"""
+		test if user post only spaces
+		"""
+		self.post_ride['username'] = '   '
+		response=self.test.post(
+			'/rides',
+			data=json.dumps(self.post_ride),
+			headers=self.headers)
+		data = json.loads(response.get_data().decode('utf-8'))
+		self.assertEqual(response.status_code,405)
+		self.assertIn(data['result'],'Input not allowed')
 
 	def test_ride_date(self):
 		"""
@@ -221,7 +234,7 @@ class viewsTest(unittest.TestCase):
 			data=json.dumps(self.post_ride),
 			headers=self.headers)
 		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(data['result'], 'Choose the correct date')
+		self.assertEqual(data['result'], 'Incorrect date')
 		self.assertEqual(response.status_code, 400)
 
 
@@ -257,9 +270,23 @@ class viewsTest(unittest.TestCase):
 			headers=self.headers)
 		data = json.loads(response.get_data().decode('utf-8'))
 		self.assertEqual(data['result'], 'All the fields are required')
-		self.assertEqual(response.status_code, 400)
+		self.assertEqual(response.status_code, 405)
 
-	def test_request_same_point():
+	def test_request_space_only(self):
+		"""
+		test if user post only spaces
+		"""
+		self.post_request['username'] = '   '
+		response = self.test.post(
+			'/rides',
+			data = json.dumps(self.post_request),
+			headers = self.headers)
+		data = json.loads(response.get_data().decode('utf-8'))
+		self.assertEqual(response.status_code, 405)
+		self.assertEqual(data['result'], 'Input not allowed')
+
+
+	def test_request_same_point(self):
 		"""
 		test if destination and pick up points are alike
 		"""
