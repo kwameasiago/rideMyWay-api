@@ -33,14 +33,23 @@ for python version 3.5 and above use pytest to run your test
 
 EndPoint	Functionality
 POST /auth/signup	Register a user
+
 POST /auth/signin	Login a user
+
 GET /rides/	Get all the ride offers
+
 GET /rides/Id/	Get a ride single by id
+
 POST /rides/	Add a ride offer
+
 PUT /rides/Id/	Update the information of a ride offer
+
 DELETE /rides/Id/	Remove a offer offer
+
 GET /rides/id/requets/	Get the ride requests for a given ride
+
 POST /rides/id/requets/	Create a ride request for a given ride
+
 DELETE /requets/id	Delete a ride request
 
 
