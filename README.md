@@ -30,4 +30,4 @@ The test were carried out from the unittest library.
 
 [![Coverage Status](https://coveralls.io/repos/github/SelaDanti/rideMyWay-api/badge.svg?branch=ch-api-implement-endpoint-158626942)](https://coveralls.io/github/SelaDanti/rideMyWay-api?branch=ch-api-implement-endpoint-158626942)
 
-[![Build Status](https://travis-ci.org/SelaDanti/rideMyWay-api.svg?branch=ch-api-implement-endpoint-158626942)](https://travis-ci.org/SelaDanti/rideMyWay-api)
+[![Build Status](https://travis-ci.org/SelaDanti/rideMyWay-api.svg?branch=ch-api-implement-endpoint-158626942)](https://travis-ci.org/SelaDanti/rideMyWay-api))
