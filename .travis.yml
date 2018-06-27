@@ -8,7 +8,8 @@ install:
   - pip install -r requirements.txt
 
 script:
-  nosetests  --with-coverage --cover-package=ridemyway && coveralls
+  - nosetests  --with-coverage --cover-package=ridemyway && coveralls
+  - py.test
 
 after_success:
 - "coveralls"
