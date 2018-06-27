@@ -16,6 +16,7 @@ install a virtual enviroment
 install the dependacies
 from terminal run manage.py
 test the endpoint using postman
+
 Features
 Users can create an account and log in. 
 Drivers can add ride offers.. 
@@ -27,7 +28,28 @@ Drivers can either accept or reject a ride request.
 
 Tests
 The test were carried out from the unittest library.
+for python version 3.5 and below use py.test to run yur test
+for python version 3.5 and above use pytest to run your test
+
+EndPoint	Functionality
+POST /auth/signup	Register a user
+POST /auth/signin	Login a user
+GET /rides/	Get all the ride offers
+GET /rides/Id/	Get a ride single by id
+POST /rides/	Add a ride offer
+PUT /rides/Id/	Update the information of a ride offer
+DELETE /rides/Id/	Remove a offer offer
+GET /rides/id/requets/	Get the ride requests for a given ride
+POST /rides/id/requets/	Create a ride request for a given ride
+DELETE /requets/id	Delete a ride request
+
+
+
+Authors 
+Kwame Asiago
+
 
 
 [![Build Status](https://travis-ci.org/SelaDanti/rideMyWay-api.svg?branch=ch-api-implement-endpoint-158626942)](https://travis-ci.org/SelaDanti/rideMyWay-api)
 
+[![Coverage Status](https://coveralls.io/repos/github/SelaDanti/rideMyWay-api/badge.svg?branch=ch-api-implement-endpoint-158626942)](https://coveralls.io/github/SelaDanti/rideMyWay-api?branch=ch-api-implement-endpoint-158626942)
