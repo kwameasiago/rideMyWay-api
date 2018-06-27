@@ -43,8 +43,6 @@ class viewsTest(unittest.TestCase):
 		"""
 		Test status code of get  rides
 		"""
-		response1 =self.test.get('/rides',headers=self.headers)
-		self.assertEqual(response1.status_code,404)
 		response = self.test.post('/rides',
 			data=json.dumps(self.post_ride),headers=self.headers)
 		self.assertEqual(response.status_code,201)
