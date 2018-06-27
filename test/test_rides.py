@@ -43,14 +43,16 @@ class viewsTest(unittest.TestCase):
 		"""
 		Test status code when there are no rides
 		"""
-		response =self.test.get('/rides',headers=self.headers)
+		test = app.test_client(self)
+		response =test.get('/rides',headers=self.headers)
 		self.assertEqual(response.status_code,404)
 
 	def test_no_rideMessage(self):
 		"""
 		test the message when no rides are available
 		"""
-		response =self.test.get('/rides',headers=self.headers)
+		test = app.test_client(self)
+		response =test.get('/rides',headers=self.headers)
 		self.assertIn('There are no new rides',response.data)
 
 	def test_single_data(self):
