@@ -4,13 +4,16 @@ Ride-my App is a carpooling application that provides drivers with the ability t
 and passengers to join available ride offers
 
 Motivation
+
 Ride My Way focuses on reducing carbon emission, traffic jam by allowing people to share a ride and reduce the cost and hustle of driving
 
 Code style
+
 The user interface was build using css javascript and HTML
 The api was build using python
 
 Installation
+
 Clone the repo to your local machine
 install a virtual enviroment
 install the dependacies
@@ -18,6 +21,7 @@ from terminal run manage.py
 test the endpoint using postman
 
 Features
+
 Users can create an account and log in. 
 Drivers can add ride offers.. 
 Passengers can view all available ride offers. 
@@ -27,11 +31,13 @@ Drivers can view the requests to the ride offer they created.
 Drivers can either accept or reject a ride request. 
 
 Tests
+
 The test were carried out from the unittest library.
 for python version 3.5 and below use py.test to run yur test
 for python version 3.5 and above use pytest to run your test
 
 EndPoint	Functionality
+
 POST /auth/signup	Register a user
 
 POST /auth/signin	Login a user
@@ -55,6 +61,7 @@ DELETE /requets/id	Delete a ride request
 
 
 Authors 
+
 Kwame Asiago
 
 
