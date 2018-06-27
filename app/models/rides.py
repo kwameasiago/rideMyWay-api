@@ -1,20 +1,19 @@
-class rides:
-	'class to relating to rides'
-	ride_data = []
-	request_data = []
-	return_data = None
+class Rides:
+	'class to add new ride'	
+	def __init__(self):
+		self.ride_data = []
+		self.request_data = []
+		self.return_data = None
 
-class new_ride(rides):
-	'class to add new ride'		
 
 	def isEmpty_ride_data(self):
-		if len(rides.ride_data) == 0:
+		if len(self.ride_data) == 0:
 			return True
 		else:
 			return False
 
 	def view_ride(self):
-		return rides.ride_data
+		return self.ride_data
 
 	def add_ride(self,username,capacity,time,date,month,year,pickup,destination,email):
 		item = {
@@ -27,14 +26,14 @@ class new_ride(rides):
 		'pickup': pickup,
 		'destination': destination,
 		'email': email,
-		'id':len(rides.ride_data)
+		'id':len(self.ride_data)
 		}
-		rides.ride_data.append(item)
+		self.ride_data.append(item)
 		return {'result':'Content Uploaded'},201
 
 	def ride_exist(self,id):
 		id = int(id)
-		if id > len(rides.ride_data):
+		if id > len(self.ride_data):
 			return False
 		elif id < 0:
 			return False
@@ -42,7 +41,7 @@ class new_ride(rides):
 			return True
 
 	def view_ride_single(self,id):
-		return rides.ride_data[int(id)]
+		return self.ride_data[int(id)]
 
 	def key_format(self,items):
 		items = items.keys()
@@ -199,24 +198,8 @@ class new_ride(rides):
 		'pick_up_point': pick_up_time,
 		'time': destination,
 		'date': pick_up_point,
-		'id':len(rides.request_data),
+		'id':len(self.request_data),
 		'ride_id':ride_id
 		}
-		rides.request_data.append(item)
+		self.request_data.append(item)
 		return {'result':'Content Uploaded'}
-
-
-"""obj = new_ride()
-print(obj.isEmpty_ride_data())
-print(obj.view_ride())
-print(obj.add_ride('username','capacity','time','date','month','year','pickup','destination','email'))
-print(obj.add_ride('kwame','capacity','time','date','month','year','pickup','destination','email'))
-print(obj.view_ride())
-print(obj.ride_exist(1))
-print(obj.view_ride_single(1))
-print(obj.key_format({'username':'username'}))
-print(obj.same_direction('as','as'))
-print(obj.is_empty(' '))
-print(obj.only_space(' '))
-#print(obj.is_string({'time':'234'}))
-print(obj.is_integer({'capacity':1,'year':2}))"""

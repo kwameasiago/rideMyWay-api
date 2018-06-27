@@ -7,7 +7,7 @@ from ..models.rides import *
 app = Flask(__name__)
 api = Api(app)
 app.config.from_pyfile('../../config.py')
-obj = new_ride()
+obj = Rides()
 
 new_ride = api.model('post ride',{
 	'username':fields.String('username'),
