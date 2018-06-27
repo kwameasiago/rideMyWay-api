@@ -141,15 +141,15 @@ class SignInTest(unittest.TestCase):
 		"""
 		test if password if empty
 		"""
-		response = self.tests.post('/auth/login',
-			header=self.headers,data=json.dumps(self.userData))
+		response = self.test.post('/auth/login',
+			headers=self.headers,data=json.dumps(self.userData))
 		self.assertEqual(response.status_code,405)
 		data =json.loads(response.get_data().decode('utf'))
 		self.assertEqual(data['result'],'Invalid data-empty password')
 
 	def testInvalidLogIn(self):
 		response = self.test.post('/auth/login',
-			header=self.headers,data=json.dumps(self.userData))
+			headers=self.headers,data=json.dumps(self.userData))
 		self.assertEqual(response.status_code,405)
 		data=json.loads(response.get_data.decode('utf-8'))
 		assertEqual(data['result'],'Invalid password or email')
