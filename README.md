@@ -29,5 +29,5 @@ Tests
 The test were carried out from the unittest library.
 
 
-
+[![Build Status](https://travis-ci.org/SelaDanti/rideMyWay-api.svg?branch=ch-api-implement-endpoint-158626942)](https://travis-ci.org/SelaDanti/rideMyWay-api)
 
