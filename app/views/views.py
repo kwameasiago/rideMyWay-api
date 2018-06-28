@@ -1,17 +1,30 @@
-from flask import Flask
-from flask_restplus import Api, Resource
+from flask import Flask,request
+from flask_restplus import Api, Resource, fields
+from ..models.signup import Upload
 
 app = Flask(__name__)
 api = Api(app)
 app.config.from_pyfile('../../config.py')
+signin = api.model('signin',{
+	'fname':fields.String,
+	'lname':fields.String,
+	'email':fields.String,
+	'dob':fields.String,
+	'location':fields.String,
+	'password':fields.String
+	})
+
 
 @api.route('/auth/signup')
 class SignUp(Resource):
 	"""
 	class to sign up new users
 	"""
+	@api.expect(signin)
 	def post(self):
-		return({'result': 'testing'})
+		data = request.get_json()
+		obj = Upload(data)
+		return(obj.uploadData())
 
 @api.route('/auth/login')
 class LogIn(Resource):
