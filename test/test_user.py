@@ -186,24 +186,6 @@ class SignUpTest(unittest.TestCase):
 		data = json.loads(response.get_data().decode('utf-8'))
 		self.assertEqual(data['result'],'Invalid input(Only whitespace)')
 
-	def testWhiteSpaceLname(self):
-		"""
-		test if contains white space only
-		"""
-		whitespace={
-		'fname':'df',
-		'lname': ' ',
-		'email': 'kwame@gmail.com',
-		'dob': '2/33/2018',
-		'Location': 'kasarani',
-		'password': 'password'
-		}
-		response = self.test.post('/auth/signup',
-			headers=self.headers,data=json.dumps(whitespace))
-		self.assertEqual(response.status_code,405)
-		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(data['result'],'Invalid input(Only whitespace)')
-
 	def testExist(self):
 		"""
 		test if user exist
