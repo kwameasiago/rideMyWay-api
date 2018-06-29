@@ -35,37 +35,18 @@ class checkData:
 		else:
 			return False
 
-	def checkDate(self,items):
-		if '-' not in items['dob']:
-			self.dataError = {'result':'Invalid Date'},405
-			return(self.dataError)
-		date = items['dob'].split('-')
-		date = list(map(int, date))
-		day,month,year = int(date[0]),int(date[1]),int(date[2])
-		ValidDate = True
-		try :
-		 	datetime.datetime(int(year),int(month),int(day))
-		except ValueError :
-			ValidDate = False
-
-		if ValidDate == False:
-			self.dataError = {'result':'Invalid Date'},405
-			return(self.dataError)
-		else:
-			return(False)
 
 
 
 
-
-class Upload(checkData):
+class Upload2(checkData):
 	def __init__(self,data):
 		self.data = data
 		self.WhiteSpace = checkData.checkWhiteSpace(self,self.data)
 		self.empty = checkData.checkEmptyData(self,self.data)
 		self.email = checkData.checkEmail(self,self.data)
-		self.date = checkData.checkDate(self,self.data)
 		self.emailExist = emailExist(self.data['email']) 
+		self.credentials = credentials(self.data['email'],self.data['password'])
 
 	def uploadData(self):
 		if self.WhiteSpace != False:
@@ -74,12 +55,10 @@ class Upload(checkData):
 			return(self.empty)
 		elif self.email != False:
 			return(self.email)
-		elif self.date != False:
-			return(self.date)
-		elif self.emailExist == True:
-			return({'result':'Email already exist'}),405
+		elif self.emailExist == False:
+			return({'result':'Invalid email or password'}),401
 		else:
-			return(insertUser(self.data))
+			return(self.credentials)
 
 
 
