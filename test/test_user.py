@@ -24,7 +24,25 @@ class SignUpTest(unittest.TestCase):
 		self.test = None
 		self.headers = None
 
-	def testEmptyName(self):
+	def testEmptyFname(self):
+		"""
+		test if string is empty name
+		"""
+		fname={
+		'fname':'',
+		'lname': 'Asiago',
+		'email': 'kwame@gmail.com',
+		'dob': '2-3-2018',
+		'Location': 'kasarani',
+		'password': 'password'
+		}
+		response = self.test.post('/auth/signup',
+			headers=self.headers,data=json.dumps(fname))
+		self.assertEqual(response.status_code,405)
+		data = json.loads(response.get_data().decode('utf-8'))
+		self.assertEqual(data['result'],'Invalid input (Empty data)')
+
+	def testEmptyLname(self):
 		"""
 		test if string is empty name
 		"""
@@ -157,6 +175,24 @@ class SignUpTest(unittest.TestCase):
 		whitespace={
 		'fname':' ',
 		'lname': 'Asiago',
+		'email': 'kwame@gmail.com',
+		'dob': '2/33/2018',
+		'Location': 'kasarani',
+		'password': 'password'
+		}
+		response = self.test.post('/auth/signup',
+			headers=self.headers,data=json.dumps(whitespace))
+		self.assertEqual(response.status_code,405)
+		data = json.loads(response.get_data().decode('utf-8'))
+		self.assertEqual(data['result'],'Invalid input(Only whitespace)')
+
+	def testWhiteSpaceLname(self):
+		"""
+		test if contains white space only
+		"""
+		whitespace={
+		'fname':'df',
+		'lname': ' ',
 		'email': 'kwame@gmail.com',
 		'dob': '2/33/2018',
 		'Location': 'kasarani',
