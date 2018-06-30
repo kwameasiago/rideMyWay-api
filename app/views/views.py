@@ -1,7 +1,6 @@
 from flask import Flask, request
-from ..models.rides import ride,fetchRide
 from flask_restplus import Resource, Api, fields
-
+from ..models.rides import ride,fetchRide,rideRequest
 
 app = Flask(__name__)
 api = Api(app)
@@ -20,7 +19,7 @@ new_ride = api.model('new_ride',{
 
 ride_request = api.model('ride_request',{
     'name': fields.String,
-    'time': fields.String,
+    'friends': fields.Integer,
     'start': fields.String,
     'finish': fields.String,
     })
@@ -31,8 +30,8 @@ ride_request = api.model('ride_request',{
 class rides(Resource):
     def get(self):
         getRide = fetchRide()
-        if len(getRide.rideData) == 0 :
-            return({'result':'there are no ride'})
+        if getRide.emptyRide():
+            return({'result':'There are no ride'},404)
         else:
             return(getRide.rideData)
 
@@ -43,21 +42,34 @@ class rides(Resource):
         obj = ride(data['name'],data['start'],data['finish'],
             data['date'],data['capacity'])
         obj.add_item()
-        return(obj.rideData)
+        return({'result':'Uploaded'},201)
 
 
 @api.route('/rides/<rideId>')
 class rides_id(Resource):
-    def get(self, rideId):     
-        sRide = fetchRide()
-        if sRide.checkRide(rideId):
-            return ({'result':'unavailable'})
-        else:
-            return(sRide.rideData[id])
+    def get(self, rideId):
+        try:     
+            sRide = fetchRide()
+            if sRide.checkRide(rideId):
+                return (sRide.rideData[int(rideId)])
+            else:
+                return ({'result':'unavailable'})
+        except IndexError:
+            return ({'result':'unavailable'},404)
 
 
 @api.route('/rides/<rideId>/requests')
 class ride_requests(Resource):
     @api.expect(ride_request)
     def post(self, rideId):
-        pass
+        data = request.get_json()
+        try:
+            sRide = fetchRide()
+            if sRide.checkRide(rideId):
+                posRide = rideRequest(data['name'],data['start'],data['finish'],data['friends'])
+                posRide.add_item()
+                return({'result':'uploaded'},201)
+            else:
+                return ({'result':'unavailable'},404)
+        except IndexError:
+            return ({'result':'unavailable'},404)
