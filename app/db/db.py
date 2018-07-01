@@ -31,17 +31,17 @@ def emailExist(email):
 	except TypeError:
 		return{'result':'Invalid data type'},404
 
-def credentials(email,password):
+def loginUser(email,password):
 	try:
 		cur = con.cursor()
 		sql = "SELECT 	password FROM users WHERE email='{}'".format(email)
 		cur.execute(sql)
 		item = cur.fetchone()
 		if check_password_hash(item[0],password):
-			return({'result':'token goes here'})
+			return(True)
 		else:
-			return({'result':'invalid username or password'}),401
-
+			return(({'result':'invalid username or password'}),401
+			)
 	except TypeError:
-		return{'result':'not found'},404
+		return({'result':'invalid username or password'}),401
 

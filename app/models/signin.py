@@ -45,20 +45,19 @@ class Upload2(checkData):
 		self.WhiteSpace = checkData.checkWhiteSpace(self,self.data)
 		self.empty = checkData.checkEmptyData(self,self.data)
 		self.email = checkData.checkEmail(self,self.data)
-		self.emailExist = emailExist(self.data['email']) 
-		self.credentials = credentials(self.data['email'],self.data['password'])
+		self.loginUser = loginUser(self.data['email'],self.data['password'])
 
-	def uploadData(self):
+	def uploadData(self,token):
 		if self.WhiteSpace != False:
 			return(self.WhiteSpace)
 		elif self.empty != False:
 			return(self.empty)
 		elif self.email != False:
 			return(self.email)
-		elif self.emailExist == False:
-			return({'result':'Invalid email or password'}),401
+		elif self.loginUser == True:
+			return({'token':token})
 		else:
-			return(self.credentials)
+			return(self.loginUser)
 
 
 
