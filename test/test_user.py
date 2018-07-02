@@ -86,7 +86,7 @@ class SignUpTest(unittest.TestCase):
 		'fname':'kwame',
 		'lname': 'Asiago',
 		'email': '',
-		'dob': '2/3/2018',
+		'dob': '2-3-2018',
 		'Location': 'kasarani',
 		'password': 'password'
 		}
@@ -122,7 +122,7 @@ class SignUpTest(unittest.TestCase):
 		'fname':'kwame',
 		'lname': 'Asiago',
 		'email': 'kwame@gmail.com',
-		'dob': '2/3/2018',
+		'dob': '2-3-2018',
 		'Location': 'kasarani',
 		'password': ''
 		}
@@ -140,8 +140,8 @@ class SignUpTest(unittest.TestCase):
 		'fname':'kwame',
 		'lastName': 'Asiago',
 		'email': '@.',
-		'dob': '2/3/2018',
-		'Location': 'kasarani',
+		'dob': '2-3-2018',
+		'location': 'kasarani',
 		'password': 'password'
 		}
 		response = self.test.post('/auth/signup',
@@ -158,7 +158,7 @@ class SignUpTest(unittest.TestCase):
 		'fname':'kwame',
 		'lname': 'Asiago',
 		'email': 'kwame@gmail.com',
-		'dob': '2/33/2018',
+		'dob': '2-37-2018',
 		'Location': 'kasarani',
 		'password': 'password'
 		}
@@ -176,7 +176,7 @@ class SignUpTest(unittest.TestCase):
 		'fname':' ',
 		'lname': 'Asiago',
 		'email': 'kwame@gmail.com',
-		'dob': '2/33/2018',
+		'dob': '2-3-2018',
 		'Location': 'kasarani',
 		'password': 'password'
 		}
@@ -194,7 +194,7 @@ class SignUpTest(unittest.TestCase):
 		'fname':'df',
 		'lname': ' ',
 		'email': 'kwame@gmail.com',
-		'dob': '2/33/2018',
+		'dob': '2-3-2018',
 		'Location': 'kasarani',
 		'password': 'password'
 		}
@@ -208,16 +208,16 @@ class SignUpTest(unittest.TestCase):
 		"""
 		test if user exist
 		"""
-		whitespace={
-		'fname':' ',
+		exist={
+		'fname':'ka',
 		'lname': 'Asiago',
-		'email': 'kwame@gmail.com',
-		'dob': '2/33/2018',
+		'email': 'john@gmail.com',
+		'dob': '2-3-2018',
 		'Location': 'kasarani',
 		'password': 'password'
 		}
 		response = self.test.post('/auth/signup',
-			headers=self.headers,data=json.dumps(self.userData))
+			headers=self.headers,data=json.dumps(exist))
 		self.assertEqual(response.status_code,405)
 		data = json.loads(response.get_data().decode('utf-8'))
 		self.assertEqual(data['result'],'Email already exist')
@@ -275,3 +275,4 @@ class SignInTest(unittest.TestCase):
 		self.assertEqual(response.status_code,405)
 		data = json.loads(response.get_data().decode('utf-8'))
 		assertEqual(data['result'],'Invalid data type')
+

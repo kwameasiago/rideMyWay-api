@@ -24,10 +24,10 @@ def emailExist(email):
 		sql="SELECT * FROM users WHERE EMAIL='{}'".format(email)
 		cur.execute(sql)
 		item = cur.fetchall()
-		if len(item) == 0:
-			return(False)
-		else:
+		if item:
 			return(True)
+		else:
+			return(False)
 	except TypeError:
 		return{'result':'Invalid data type'},404
 
@@ -40,8 +40,8 @@ def loginUser(email,password):
 		if check_password_hash(item[0],password):
 			return(True)
 		else:
-			return(({'result':'invalid username or password'}),401
+			return(({'result':'Invalid email or password'}),401
 			)
 	except TypeError:
-		return({'result':'invalid username or password'}),401
+		return({'result':'Invalid email or password'}),401
 
