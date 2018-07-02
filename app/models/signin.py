@@ -55,7 +55,7 @@ class Upload2(checkData):
 		elif self.email != False:
 			return(self.email)
 		elif self.loginUser == True:
-			return({'token':token})
+			return({'token':token},201)
 		else:
 			return(self.loginUser)
 
