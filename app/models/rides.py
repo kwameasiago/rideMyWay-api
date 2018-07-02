@@ -1,76 +1,65 @@
-class rides:
-	def __init__(self):
-		self.all_ride = []
-		self.all_request = []
-
-	def add_ride(self,
-		username,
-		car_capacity,
-		contact,
-		time,
-		date,
-		month,
-		year,
-		destination,
-		pickup):
-		data = {
-		'username': username,
-		'car capacity': car_capacity,
-		'contact': contact,
-		'time': time,
-		'date': date,
-		'month': month,
-		'year': year,
-		'destination': destination,
-		'pickup': pickup
+class ride:
+	def __init__(self,name,start,finish,date,capacity):
+		self.name = name
+		self.start = start
+		self.finish = finish,
+		self.date = date
+		self.capacity = capacity
+	
+	rideData = []
+	def add_item(self):	
+		payload = {
+		'name':self.name,
+		'start':self.start,
+		'finish':self.finish,
+		'date':self.date,
+		'capacity':self.capacity,
+		'id':len(ride.rideData)
 		}
-		data['id'] = len(self.all_ride)
-		self.all_ride.append(data)
+
+		ride.rideData.append(payload)
+		return True
+class rideRequest:
+	def __init__(self,name,start,finish,friends):
+		self.name = name
+		self.start = start
+		self.finish = finish,
+		self.friends = friends
+	
+	requestData = []
+	def add_item(self):	
+		payload = {
+		'name':self.name,
+		'start':self.start,
+		'finish':self.finish,
+		'friends':self.friends,
+		'id':len(rideRequest.requestData)
+		}
+
+		rideRequest.requestData.append(payload)
 		return True
 
-	def fetch_all(self, items):
-		if len(items) > 0:
+
+class fetchRide(ride):
+	def __init__(self):
+		self.rideData = ride.rideData
+
+	def emptyRide(self):
+		if len(ride.rideData) == 0:
 			return True
 		else:
 			return False
 
-	def fetch_one(self, id, items):
-		index = 0
-		if id < 0:
+	def checkRide(self,rid):
+		data=len(ride.rideData)
+		if data == 0 and int(rid) < 0:
 			return False
-		elif id > len(items):
-			return False
+		elif int(rid) <= data:
+			return True
 		else:
-			while(index < len(items)):
-				if int(id) == index:
-					return True
-				index = index + 1
+			return False
 
-	def request_ride(self, id, name, time, destination, pickup, items):
-		index = 0
-		data = {
-		'name': name,
-		'time': time,
-		'destination': destination,
-		'pickup': pickup,
-		'id': len(self.all_request) + 1
-		}
 
-		while (index < len(items)):
-			if id < 0:
-				return False
-			if id > len(items):
-				return False
-			if id == index:
-				data['ride id'] = items[index]['id']
-				self.all_request.append(data)
-				return True
-			index = index + 1
 
-"""obj = rides()
-obj.add_ride('one','yesy','yesy','yesy','yesy','yesy','yesy','yesy','sd')
-print(obj.all_ride[0])
-print(obj.fetch_all(obj.all_ride))
-print(obj.fetch_one(0,obj.all_ride))
-print(obj.request_ride(3,'name','time','destination','pickup',obj.all_ride))
-"""
+
+
