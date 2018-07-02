@@ -3,7 +3,7 @@ import datetime
 from ..db.db import *
 
 
-class checkData:
+class CheckUserData:
     """
     class contains methods for data validation
     """
@@ -27,9 +27,9 @@ class checkData:
         return False
 
     def checkEmail(self, items):
-        items = items
+        items = items['email']
         match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$',
-            items['email'])
+            items)
         if match is None:
             self.dataError = {'result': 'Invalid data email'}, 405
             return(self.dataError)
@@ -37,12 +37,12 @@ class checkData:
             return False
 
 
-class Upload2(checkData):
+class Upload2(CheckUserData):
     def __init__(self, data):
         self.data = data
-        self.WhiteSpace = checkData.checkWhiteSpace(self, self.data)
-        self.empty = checkData.checkEmptyData(self, self.data)
-        self.email = checkData.checkEmail(self, self.data)
+        self.WhiteSpace = CheckUserData.checkWhiteSpace(self, self.data)
+        self.empty = CheckUserData.checkEmptyData(self, self.data)
+        self.email = CheckUserData.checkEmail(self, self.data)
         self.loginUser = loginUser(self.data['email'], self.data['password'])
 
     def uploadData(self, token):

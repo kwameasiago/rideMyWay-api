@@ -20,7 +20,7 @@ token = jwt.encode({'user': 'kwame', 'exp': datetime.datetime.utcnow()+datetime.
 token = token.decode('UTF-8')
 
 signUp = api.model('signin', {
-    'fname': fields.String,
+    'fname': fields.String('fname'),
     'lname': fields.String,
     'email': fields.String,
     'dob': fields.String,

@@ -27,9 +27,9 @@ class checkData:
         return False
 
     def checkEmail(self,items):
-        items = items
+        items = items['email']
         match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$',
-            items['email'])
+            items)
         if match is None:
             self.dataError = {'result':'Invalid data email'},405
             return(self.dataError)
