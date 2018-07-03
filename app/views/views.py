@@ -6,6 +6,7 @@ from functools import wraps
 from ..models.signup import Register
 from ..models.signin import Login
 from ..models.ride import AddRide
+from ..db.db import getAllRides, getOneRide
 
 app = Flask(__name__)
 authorizations = {
@@ -89,7 +90,7 @@ class Rides(Resource):
     @api.doc(security='apikey')
     @token_required
     def get(self):
-        return({'result': 'testing'})
+        return getAllRides()
 
 
 @api.route('/rides/<rideId>')
@@ -99,8 +100,8 @@ class OneRide(Resource):
     """
     @api.doc(security='apikey')
     @token_required
-    def get(self):
-        return({'result': 'testing'})
+    def get(self,rideId):
+        return getOneRide(rideId)
 
 
 @api.route('/users/rides')

@@ -77,3 +77,37 @@ def postRide(data):
     except psycopg2.Error as e:
         con.rollback()
         return({e.pgcode: e.pgerror}, 500)
+
+
+# get all rides
+
+
+def getAllRides():
+    try:
+        cur = con.cursor()
+        sql = "SELECT * FROM rides"
+        cur.execute(sql)
+        allRides = cur.fetchall()
+        return allRides
+    except TypeError:
+        return{'result':'no ride found'}, 404
+
+
+# get one ride
+
+
+def getOneRide(rideId):
+    try:
+        cur = con.cursor()
+        sql = "SELECT start, finish, slot, email, departure_date FROM rides WHERE id={}".format(rideId)
+        cur.execute(sql)
+        oneRide = cur.fetchall()
+        oneRide = {
+        'start': oneRide[0][0],
+        'finish': oneRide[0][1],
+        'slot': oneRide[0][2],
+        'email': oneRide[0][3],
+        'departure_date': oneRide[0][4]}
+        return oneRide
+    except TypeError:
+        return{'result':'ride not found'}, 404
