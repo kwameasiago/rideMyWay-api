@@ -8,7 +8,7 @@ class CheckRideData:
         self.dataErr = None
 
     def checkWhiteSpace(self, items):
-        items = [items['start'], items['finish'],items['email'],items['departureDate']]
+        items = [items['start'], items['finish'], items['email'], items['departureDate']]
         for item in items:
             if item.isspace():
                 self.dataError = {'result': 'Invalid input(Only whitespace)'}, 405
@@ -16,7 +16,7 @@ class CheckRideData:
         return(False)
 
     def checkEmptyData(self, items):
-        items = [items['start'], items['finish'],items['email'],items['departureDate']]
+        items = [items['start'], items['finish'], items['email'], items['departureDate']]
         for item in items:
             if not item:
                 self.dataError = {'result': 'Invalid input (Empty data)'}, 405
@@ -24,22 +24,21 @@ class CheckRideData:
         return False
 
     def checkEmail(self, items):
-        items = items
-        match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$',
-            items['email'])
+        items = items['email']
+        match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', items)
         if match is None:
             self.dataError = {'result': 'Invalid data email'}, 405
             return(self.dataError)
         else:
             return False
 
-    def CheckDate(self,items):
+    def CheckDate(self, items):
         if '-' not in items['departureDate']:
-            self.dataError = {'result':'Invalid Date'},405
+            self.dataError = {'result': 'Invalid Date'}, 405
             return(self.dataError)
         date = items['departureDate'].split('-')
         date = list(map(int, date))
-        day,month,year = int(date[0]),int(date[1]),int(date[2])
+        day, month, year = int(date[0]), int(date[1]), int(date[2])
         ValidDate = True
         try:
             datetime.datetime(int(year), int(month), int(day))
@@ -47,7 +46,7 @@ class CheckRideData:
             ValidDate = False
 
         if ValidDate is False:
-            self.dataError = {'result':'Invalid Date'},405
+            self.dataError = {'result': 'Invalid Date'}, 405
             return(self.dataError)
         else:
             return(False)
@@ -55,26 +54,26 @@ class CheckRideData:
     def CheckLocation(self, items):
         start, finish = items['start'], items['finish']
         if start == finish:
-            self.dataError = {'result': 'Start point and Finish point can not be identical'},405
+            self.dataError = {'result': 'Start point and Finish point can not be identical'}, 405
             return(self.dataError)
         else:
             return False
 
-    def CheckSlots(self,items):
+    def CheckSlots(self, items):
         if items['slot'] < 0:
-            self.dataError = {'result':'Invalid slot number(less than zero)'},405
+            self.dataError = {'result': 'Invalid slot number(less than zero)'}, 405
             return(self.dataError)
         else:
             try:
                 items['slot'].is_integer()
-                self.dataError = {'result':'Invalid slot number(Mast be an int)'},405
+                self.dataError = {'result': 'Invalid slot number(Mast be an int)'}, 405
                 return(self.dataError)
             except AttributeError:
                 return(False)
 
 
 class AddRide(CheckRideData):
-    def __init__(self,data):
+    def __init__(self, data):
         self.data = data
         self.checkWhiteSpace = CheckRideData.checkWhiteSpace(self, self.data)
         self.checkEmptyData = CheckRideData.checkEmptyData(self, self.data)
@@ -97,5 +96,4 @@ class AddRide(CheckRideData):
         elif self.CheckSlots is not False:
             return self.CheckSlots
         else:
-            pass
-
+            return postRide(self.data)

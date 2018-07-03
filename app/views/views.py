@@ -30,14 +30,13 @@ signIn = api.model('signup', {
     'email': fields.String,
     'password': fields.String
     })
-rides = api.model('rides',{
+rides = api.model('rides', {
     'start': fields.String,
     'finish': fields.String,
     'slot': fields.Integer,
     'email': fields.String,
     'departureDate': fields.String
     })
-
 
 
 def token_required(f):
@@ -49,7 +48,7 @@ def token_required(f):
         if not token:
             return({'result': 'token is missing'})
         try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
+            tokenData = jwt.decode(token, app.config['SECRET_KEY'])
         except:
             return({'result': 'token is invalid'})
         return(f(*args, **kwargs))
@@ -77,7 +76,7 @@ class LogIn(Resource):
     def post(self):
         data = request.get_json()
         signin = Login(data)
-        token = jwt.encode({'user': 'kwame', 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=240)}, app.config['SECRET_KEY'])
+        token = jwt.encode({'user': data['email'], 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=240)}, app.config['SECRET_KEY'])
         token = token.decode('UTF-8')
         return(signin.uploadData(token))
 
@@ -114,6 +113,9 @@ class PostRide(Resource):
     @token_required
     def post(self):
         data = request.get_json()
+        token = request.headers['X-API-KEY']
+        tokenData = jwt.decode(token, app.config['SECRET_KEY'])
+        data['user_email'] = tokenData['user']
         add = AddRide(data)
         return(add.Upload())
 
