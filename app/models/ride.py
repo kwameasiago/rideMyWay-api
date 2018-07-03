@@ -82,7 +82,7 @@ class AddRide(CheckRideData):
         self.CheckLocation = CheckRideData.CheckLocation(self, self.data)
         self.CheckSlots = CheckRideData.CheckSlots(self, self.data)
 
-    def Upload(self):
+    def UploadData(self):
         if self.checkEmptyData is not False:
             return self.checkEmptyData
         elif self.checkWhiteSpace is not False:

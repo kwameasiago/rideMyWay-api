@@ -13,7 +13,9 @@ def insertUser(data):
     newPassword = generate_password_hash(password, method='sha256')
     try:
         cur = con.cursor()
-        sql = "INSERT INTO users(firstName, lastName, email, location, birthDate, password) VALUES('{}', '{}', '{}', '{}', '{}', '{}')".format(firstName, lastName, email, location, birthDate, newPassword)
+        sql = "INSERT INTO users "\
+        "(firstName, lastName, email, location, birthDate, password) VALUES "\
+        "('{}', '{}', '{}', '{}', '{}', '{}')".format(firstName, lastName, email, location, birthDate, newPassword)
         cur.execute(sql)
         con.commit()
         return({'result': 'account created'})
@@ -67,7 +69,8 @@ def postRide(data):
         userId = userId[0]
         start, finish, slot = data['start'], data['finish'], data['slot']
         email, departureDate = data['email'], data['departureDate']
-        sql = "INSERT INTO rides (start, finish, slot, email, departure_date,user_id) VALUES('{}','{}','{}','{}','{}',{})" .format(start, finish, slot, email, departureDate, userId)
+        sql = "INSERT INTO rides (start, finish, slot, email, departure_date,user_id) "\
+        "VALUES('{}','{}','{}','{}','{}',{})" .format(start, finish, slot, email, departureDate, userId)
         cur.execute(sql)
         con.commit()
         return({'result': 'Ride offer created'})
