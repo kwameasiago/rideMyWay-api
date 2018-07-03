@@ -34,6 +34,17 @@ def emailExist(email):
         return{'result': 'Invalid data type'}, 404
 
 
+def getUser(self,email):
+    try:
+        cur = con.cursor()
+        sql = "SELECT id FROM users WHERE email = '{}'".format(email)
+        cur.execute(sql)
+        item = cur.fetchone()
+        if item:
+            return item
+    except:
+        return({e.pgcode, e.pgerror},500)
+
 def loginUser(email, password):
     try:
         cur = con.cursor()
@@ -46,3 +57,17 @@ def loginUser(email, password):
             return(({'result': 'Invalid email or password'}), 401)
     except TypeError:
         return({'result': 'Invalid email or password'}), 401
+
+
+def insertRide(data):
+    start, finish, slots = data['start'], data['finish'], data['slots']
+    email, date = data['email'], data['date']
+    try:
+        cur = con.cursor()
+        sql = "INSERT INTO rides(start, finish, slots, email, date) VALUES('{}','{}','{}','{}','{}')".format(start, finish, slots, email, date)
+        cur.execute(sql)
+        con.commit()
+        return({'result': 'Ride offer posted'})
+    except psycopg2.Error as e:
+        return({e.pgcode, e.pgerror},500)
+

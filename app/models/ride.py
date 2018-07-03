@@ -1,5 +1,6 @@
 import re
 import datetime
+from ..db.db import *
 
 class CheckRideData:
     def __init__(self):
@@ -38,7 +39,8 @@ class CheckRideData:
     def CheckLocation(self, items):
         start, finish = items['start'], items['finish']
         if start == finish:
-            self.dataError = {'result': 'Start point and Finish point are the same'}
+            self.dataError = {'result': 'Start point and Finish point can not be identical'},405
+            return(self.dataError)
         else:
             return False
 
@@ -64,12 +66,12 @@ class CheckRideData:
 
 
     def CheckSlots(self,items):
-        if items['slot'] < 0:
+        if items['slots'] < 0:
             self.dataError = {'result':'Invalid slot number(less than zero)'},405
             return(self.dataError)
         else:
             try:
-                items['slot'].is_integer()
+                items['slots'].is_integer()
                 self.dataError = {'result':'Invalid slot number(Mast be an int)'},405
                 return(self.dataError)
             except AttributeError:
@@ -103,4 +105,4 @@ class ModifyRide(CheckRideData):
         elif self.CheckSlots is not False:
             return(self.CheckSlots)
         else:
-            pass
+            return(insertRide(self.data))

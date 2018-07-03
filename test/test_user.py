@@ -210,7 +210,7 @@ class SignUpTest(unittest.TestCase):
         exist = {
         'fname': 'ka',
         'lname': 'Asiago',
-        'email': 'john@gmail.com',
+        'email': 'johndoe@gmail.com',
         'dob': '2-3-2018',
         'Location': 'kasarani',
         'password': 'password'

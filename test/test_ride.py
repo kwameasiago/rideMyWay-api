@@ -24,6 +24,7 @@ class TestAddRide(unittest.TestCase):
 		self.headers = None
 		self.userData = None
 
+
 	def testEmptyStart(self):
 		emptyStart = {
 		'start': '',
@@ -81,6 +82,7 @@ class TestAddRide(unittest.TestCase):
 		response = self.test.post('/users/rides', headers=self.headers,
 			data=json.dumps(self.userData))
 		data = json.loads(response.get_data().decode('utf-8'))
+
 		self.assertEqual(response.status_code, 405)
 
 	def testEmail(self):
@@ -89,13 +91,15 @@ class TestAddRide(unittest.TestCase):
 		'finish': 'mwiki',
 		'date': '1-2-2018',
 		'slots': 4,
-		'email': 'johngmail.co',
+		'email': 'johngmailco',
 		'time': '12:30:PM'
 		}
-		response = self.test.post('/users/rides', headers=self.headers,
+		response = self.test.post('/users/rides', headers=dict(Authorization='Bearer ' + access_token),
 			data=json.dumps(self.userData))
 		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(response.status_code, 405)
+		token = json.loads(response.data.decode('utf-8'))
+		#self.assertEqual(response.status_code, 405)
+		self.assertEqual(response.data, 405)
 
 	def testTime(self):
 		emptyStart = {

@@ -5,6 +5,7 @@ from flask_restplus import Api, Resource, fields
 from functools import wraps
 from ..models.signup import Upload
 from ..models.signin import Upload2
+from ..models.ride import ModifyRide
 
 app = Flask(__name__)
 authorizations = {
@@ -16,11 +17,9 @@ authorizations = {
 }
 api = Api(app, authorizations=authorizations)
 app.config.from_pyfile('../../config.py')
-token = jwt.encode({'user': 'kwame', 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=20)}, app.config['SECRET_KEY'])
-token = token.decode('UTF-8')
 
 signUp = api.model('signin', {
-    'fname': fields.String('fname'),
+    'fname': fields.String,
     'lname': fields.String,
     'email': fields.String,
     'dob': fields.String,
@@ -30,6 +29,14 @@ signUp = api.model('signin', {
 signIn = api.model('signup', {
     'email': fields.String,
     'password': fields.String
+    })
+
+ride = api.model('ride',{
+    'start': fields.String,
+    'finish': fields.String,
+    'slots': fields.Integer,
+    'email': fields.String,
+    'date': fields.String
     })
 
 
@@ -46,7 +53,7 @@ def token_required(f):
         except:
             return({'result': 'token is invalid'})
         return(f(*args, **kwargs))
-    return(decorated)
+    return decorated
 
 
 @api.route('/auth/signup')
@@ -70,6 +77,8 @@ class LogIn(Resource):
     def post(self):
         data = request.get_json()
         signin = Upload2(data)
+        token = jwt.encode({'user': data['email'], 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=20)}, app.config['SECRET_KEY'])
+        token = token.decode('UTF-8')
         return(signin.uploadData(token))
 
 
@@ -100,10 +109,13 @@ class PostRide(Resource):
     """
     class to post new ride
     """
+    @api.expect(ride)
     @api.doc(security='apikey')
     @token_required
     def post(self):
-        return({'result': 'testing'})
+        data = request.get_json()
+        rideOffer = ModifyRide(data)
+        return(rideOffer.UploadRide())
 
 
 @api.route('/rides/<rideId>/requests')
