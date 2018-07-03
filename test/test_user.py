@@ -200,7 +200,7 @@ class SignInTest(unittest.TestCase):
 		self.headers = None
 		self.test = None
 
-	def testEmptyEmail2(self):
+	def testEmptyEmailLogin(self):
 		"""test if email is empty
 		"""
 		response = self.test.post('/auth/login',
@@ -209,7 +209,7 @@ class SignInTest(unittest.TestCase):
 		data = json.loads(response.get_data().decode('utf-8'))
 		self.assertEqual(data['result':'Invalid data-empty email'])
 
-	def testEmptyPassword2(self):
+	def testEmptyPasswordLogin(self):
 		"""
 		test if password if empty
 		"""

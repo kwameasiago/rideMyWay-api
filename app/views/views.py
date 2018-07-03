@@ -6,10 +6,10 @@ app = Flask(__name__)
 api = Api(app)
 app.config.from_pyfile('../../config.py')
 signin = api.model('signin',{
-	'fname':fields.String,
-	'lname':fields.String,
+	'firstName':fields.String,
+	'lastName':fields.String,
 	'email':fields.String,
-	'dob':fields.String,
+	'birthDate':fields.String,
 	'location':fields.String,
 	'password':fields.String
 	})
@@ -81,5 +81,3 @@ class PickRequest(Resource):
 	"""
 	def put(self):
 		return({'result':'testing'})
-
-
