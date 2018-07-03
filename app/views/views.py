@@ -3,8 +3,9 @@ import datetime
 from flask import Flask, request
 from flask_restplus import Api, Resource, fields
 from functools import wraps
-from ..models.signup import Upload
-from ..models.signin import Upload2
+from ..models.signup import Register
+from ..models.signin import Login
+from ..models.ride import AddRide
 
 app = Flask(__name__)
 authorizations = {
@@ -16,8 +17,6 @@ authorizations = {
 }
 api = Api(app, authorizations=authorizations)
 app.config.from_pyfile('../../config.py')
-token = jwt.encode({'user': 'kwame', 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=20)}, app.config['SECRET_KEY'])
-token = token.decode('UTF-8')
 
 signUp = api.model('signin', {
     'firstName': fields.String,
@@ -31,6 +30,14 @@ signIn = api.model('signup', {
     'email': fields.String,
     'password': fields.String
     })
+rides = api.model('rides',{
+    'start': fields.String,
+    'finish': fields.String,
+    'slot': fields.Integer,
+    'email': fields.String,
+    'departureDate': fields.String
+    })
+
 
 
 def token_required(f):
@@ -57,7 +64,7 @@ class SignUp(Resource):
     @api.expect(signUp)
     def post(self):
         data = request.get_json()
-        signup = Upload(data)
+        signup = Register(data)
         return(signup.uploadData())
 
 
@@ -69,7 +76,9 @@ class LogIn(Resource):
     @api.expect(signIn)
     def post(self):
         data = request.get_json()
-        signin = Upload2(data)
+        signin = Login(data)
+        token = jwt.encode({'user': 'kwame', 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=240)}, app.config['SECRET_KEY'])
+        token = token.decode('UTF-8')
         return(signin.uploadData(token))
 
 
@@ -101,9 +110,12 @@ class PostRide(Resource):
     class to post new ride
     """
     @api.doc(security='apikey')
+    @api.expect(rides)
     @token_required
     def post(self):
-        return({'result': 'testing'})
+        data = request.get_json()
+        add = AddRide(data)
+        return(add.Upload())
 
 
 @api.route('/rides/<rideId>/requests')

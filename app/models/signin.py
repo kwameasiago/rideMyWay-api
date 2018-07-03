@@ -3,7 +3,7 @@ import datetime
 from ..db.db import *
 
 
-class checkData:
+class CheckUserData:
     """
     class contains methods for data validation
     """
@@ -37,12 +37,12 @@ class checkData:
             return False
 
 
-class Upload2(checkData):
+class Login(CheckUserData):
     def __init__(self, data):
         self.data = data
-        self.WhiteSpace = checkData.checkWhiteSpace(self, self.data)
-        self.empty = checkData.checkEmptyData(self, self.data)
-        self.email = checkData.checkEmail(self, self.data)
+        self.WhiteSpace = CheckUserData.checkWhiteSpace(self, self.data)
+        self.empty = CheckUserData.checkEmptyData(self, self.data)
+        self.email = CheckUserData.checkEmail(self, self.data)
         self.loginUser = loginUser(self.data['email'], self.data['password'])
 
     def uploadData(self, token):
@@ -53,6 +53,6 @@ class Upload2(checkData):
         elif self.email is not False:
             return(self.email)
         elif self.loginUser is True:
-            return({'token': token}, 201)
+            return({'Use token:-': token}, 201)
         else:
             return(self.loginUser)
