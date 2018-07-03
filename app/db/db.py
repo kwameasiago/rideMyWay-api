@@ -6,12 +6,12 @@ con = psycopg2.connect(dbname='ride', user='postgres', host='localhost', passwor
 
 
 def insertUser(data):
-    fname, lname, location = data['fname'], data['lname'], data['location']
-    password, email, dob = data['password'], data['email'], data['dob']
+    firstName, lastName, location = data['firstName'], data['lastName'], data['location']
+    password, email, birthDate = data['password'], data['email'], data['birthDate']
     newPassword = generate_password_hash(password, method='sha256')
     try:
         cur = con.cursor()
-        sql = "INSERT INTO users(fname, lname, email, location, dob, password) VALUES('{}', '{}', '{}', '{}', '{}', '{}')".format(fname, lname, email, location, dob, newPassword)
+        sql = "INSERT INTO users(firstName, lastName, email, location, birthDate, password) VALUES('{}', '{}', '{}', '{}', '{}', '{}')".format(firstName, lastName, email, location, birthDate, newPassword)
         cur.execute(sql)
         con.commit()
         return({'result': 'account created'})

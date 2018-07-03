@@ -9,10 +9,10 @@ class SignUpTest(unittest.TestCase):
     """
     def setUp(self):
         self.userData = {
-        'fname': 'kwame',
-        'lname': 'Asiago',
+        'firstName': 'kwame',
+        'lastName': 'Asiago',
         'email': 'kwam@gmail.com',
-        'dob': '2-3-2018',
+        'birthDate': '2-3-2018',
         'location': 'kasarani',
         'password': 'password'}
         self.test = app.test_client()
@@ -23,38 +23,38 @@ class SignUpTest(unittest.TestCase):
         self.test = None
         self.headers = None
 
-    def testEmptyFname(self):
+    def testEmptyfirstName(self):
         """
         test if string is empty name
         """
-        fname = {
-        'fname': '',
-        'lname': 'Asiago',
+        firstName = {
+        'firstName': '',
+        'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
-        'dob': '2-3-2018',
+        'birthDate': '2-3-2018',
         'Location': 'kasarani',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
-            headers=self.headers, data=json.dumps(fname))
+            headers=self.headers, data=json.dumps(firstName))
         self.assertEqual(response.status_code, 405)
         data = json.loads(response.get_data().decode('utf-8'))
         self.assertEqual(data['result'], 'Invalid input (Empty data)')
 
-    def testEmptyLname(self):
+    def testEmptylastName(self):
         """
         test if string is empty name
         """
-        fname = {
-        'fname': '',
-        'lname': 'Asiago',
+        firstName = {
+        'firstName': '',
+        'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
-        'dob': '2-3-2018',
+        'birthDate': '2-3-2018',
         'Location': 'kasarani',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
-        headers=self.headers, data=json.dumps(fname))
+        headers=self.headers, data=json.dumps(firstName))
         self.assertEqual(response.status_code, 405)
         data = json.loads(response.get_data().decode('utf-8'))
         self.assertEqual(data['result'], 'Invalid input (Empty data)')
@@ -64,10 +64,10 @@ class SignUpTest(unittest.TestCase):
         test if string is empty date
         """
         date = {
-        'fname': 'kwame',
-        'lname': 'Asiago',
+        'firstName': 'kwame',
+        'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
-        'dob': '',
+        'birthDate': '',
         'Location': 'kasarani',
         'password': 'password'
         }
@@ -82,10 +82,10 @@ class SignUpTest(unittest.TestCase):
         test if string is empty email
         """
         email = {
-        'fname': 'kwame',
-        'lname': 'Asiago',
+        'firstName': 'kwame',
+        'lastName': 'Asiago',
         'email': '',
-        'dob': '2-3-2018',
+        'birthDate': '2-3-2018',
         'Location': 'kasarani',
         'password': 'password'
         }
@@ -100,10 +100,10 @@ class SignUpTest(unittest.TestCase):
         test if string is empty Location
         """
         location = {
-        'fname': 'kwame',
-        'lname': 'Asiago',
+        'firstName': 'kwame',
+        'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
-        'dob': '2/3/2018',
+        'birthDate': '2/3/2018',
         'Location': '',
         'password': 'password'
         }
@@ -118,10 +118,10 @@ class SignUpTest(unittest.TestCase):
         test if string is empty Location
         """
         password = {
-        'fname': 'kwame',
-        'lname': 'Asiago',
+        'firstName': 'kwame',
+        'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
-        'dob': '2-3-2018',
+        'birthDate': '2-3-2018',
         'Location': 'kasarani',
         'password': ''
         }
@@ -136,10 +136,10 @@ class SignUpTest(unittest.TestCase):
         test if invalid email
         """
         email = {
-        'fname': 'kwame',
+        'firstName': 'kwame',
         'lastName': 'Asiago',
         'email': '@.',
-        'dob': '2-3-2018',
+        'birthDate': '2-3-2018',
         'location': 'kasarani',
         'password': 'password'
         }
@@ -154,10 +154,10 @@ class SignUpTest(unittest.TestCase):
         test if invalide date
         """
         date = {
-        'fname': 'kwame',
-        'lname': 'Asiago',
+        'firstName': 'kwame',
+        'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
-        'dob': '2-37-2018',
+        'birthDate': '2-37-2018',
         'Location': 'kasarani',
         'password': 'password'
         }
@@ -172,10 +172,10 @@ class SignUpTest(unittest.TestCase):
         test if contains white space only
         """
         whitespace = {
-        'fname': ' ',
-        'lname': 'Asiago',
+        'firstName': ' ',
+        'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
-        'dob': '2-3-2018',
+        'birthDate': '2-3-2018',
         'Location': 'kasarani',
         'password': 'password'
         }
@@ -185,15 +185,15 @@ class SignUpTest(unittest.TestCase):
         data = json.loads(response.get_data().decode('utf-8'))
         self.assertEqual(data['result'], 'Invalid input(Only whitespace)')
 
-    def testWhiteSpaceLname(self):
+    def testWhiteSpacelastName(self):
         """
         test if contains white space only
         """
         whitespace = {
-        'fname': 'df',
-        'lname': ' ',
+        'firstName': 'df',
+        'lastName': ' ',
         'email': 'kwame@gmail.com',
-        'dob': '2-3-2018',
+        'birthDate': '2-3-2018',
         'Location': 'kasarani',
         'password': 'password'
         }
@@ -208,10 +208,10 @@ class SignUpTest(unittest.TestCase):
         test if user exist
         """
         exist = {
-        'fname': 'ka',
-        'lname': 'Asiago',
+        'firstName': 'ka',
+        'lastName': 'Asiago',
         'email': 'john@gmail.com',
-        'dob': '2-3-2018',
+        'birthDate': '2-3-2018',
         'Location': 'kasarani',
         'password': 'password'
         }
@@ -236,7 +236,7 @@ class SignInTest(unittest.TestCase):
         self.headers = None
         self.test = None
 
-    def testEmptyEmail2(self):
+    def testEmptyEmailLogin(self):
         """test if email is empty
         """
         empty = {
@@ -247,7 +247,7 @@ class SignInTest(unittest.TestCase):
             headers=self.headers, data=json.dumps(empty))
         self.assertEqual(response.status_code, 405)
 
-    def testEmptyPassword2(self):
+    def testEmptyPasswordLogin(self):
         """
         test if password if empty
         """
