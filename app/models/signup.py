@@ -37,10 +37,10 @@ class checkData:
             return False
 
     def checkDate(self,items):
-        if '-' not in items['dob']:
+        if '-' not in items['birthDate']:
             self.dataError = {'result':'Invalid Date'},405
             return(self.dataError)
-        date = items['dob'].split('-')
+        date = items['birthDate'].split('-')
         date = list(map(int, date))
         day,month,year = int(date[0]),int(date[1]),int(date[2])
         ValidDate = True
