@@ -11,8 +11,9 @@ install:
   - pip install -r requirements.txt
 
 before_script:
-  - psql -c 'create database ride'
-  - cp database.yml.travis config/database.yml
+  - psql -c "create database ride;"
+  - psql -c "create user danti with password 'python';"
+  - psql -c  "grant all privileges on database ride to danti;"
 
 script:
   - "coveralls"
