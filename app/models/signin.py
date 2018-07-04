@@ -60,3 +60,7 @@ class Login(CheckUserData):
             return({'Use token:-': token}, 201)
         else:
             return(self.loginUser)
+
+
+    def __repr__(self):
+        return('Login ({})').format(self.data)

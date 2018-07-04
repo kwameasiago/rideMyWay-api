@@ -81,3 +81,7 @@ class Register(CheckDate):
             return({'result': 'Email already exist'}), 405
         else:
             return(insertUser(self.data))
+
+
+    def __repr__(self):
+        return('Register ({})').format(self.data)
