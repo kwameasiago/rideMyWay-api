@@ -116,5 +116,5 @@ def getOneRide(rideId):
         'email': oneRide[0][3],
         'departure_date': oneRide[0][4]}
         return oneRide
-    except TypeError:
+    except IndexError:
         return{'result':'ride not found'}, 404
