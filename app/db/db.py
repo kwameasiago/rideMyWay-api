@@ -8,6 +8,35 @@ con = psycopg2.connect(dbname='ride', user='postgres', host='localhost', passwor
 
 
 def insertUser(data):
+    try:
+        cur = con.cursor()
+        sqlUser = """CREATE TABLE IF NOT EXISTS users(
+        ID SERIAL PRIMARY KEY,
+        FIRSTNAME VARCHAR(50) NOT NULL,
+        LASTNAME VARCHAR(50) NOT NULL,
+        EMAIL VARCHAR(80) NOT NULL,
+        BIRTHDATE VARCHAR(50) NOT NULL,
+        LOCATION VARCHAR(50) NOT NULL,
+        PASSWORD VARCHAR(80) NOT NULL);
+        """
+        sqlRide="""
+        CREATE TABLE IF NOT EXISTS rides(
+        ID SERIAL PRIMARY KEY,
+        START VARCHAR(50) NOT NULL,
+        FINISH VARCHAR(50) NOT NULL,
+        DEPARTURE_DATE VARCHAR(50) NOT NULL,
+        EMAIL VARCHAR(50) NOT NULL,
+        SLOT INT NOT NULL,
+        USER_ID INT REFERENCES USERS(ID)
+        )
+        """
+        cur.execute(sqlUser)
+        cur.execute(sqlRide)
+        con.commit()
+    except psycopg2.Error as e:
+        con.rollback()
+        return({e.pgcode: e.pgerror}, 500)
+
     firstName, lastName, location = data['firstName'], data['lastName'], data['location']
     password, email, birthDate = data['password'], data['email'], data['birthDate']
     newPassword = generate_password_hash(password, method='sha256')
@@ -30,6 +59,35 @@ def insertUser(data):
 def emailExist(email):
     try:
         cur = con.cursor()
+        sqlUser = """CREATE TABLE IF NOT EXISTS users(
+        ID SERIAL PRIMARY KEY,
+        FIRSTNAME VARCHAR(50) NOT NULL,
+        LASTNAME VARCHAR(50) NOT NULL,
+        EMAIL VARCHAR(80) NOT NULL,
+        BIRTHDATE VARCHAR(50) NOT NULL,
+        LOCATION VARCHAR(50) NOT NULL,
+        PASSWORD VARCHAR(80) NOT NULL);
+        """
+        sqlRide="""
+        CREATE TABLE IF NOT EXISTS rides(
+        ID SERIAL PRIMARY KEY,
+        START VARCHAR(50) NOT NULL,
+        FINISH VARCHAR(50) NOT NULL,
+        DEPARTURE_DATE VARCHAR(50) NOT NULL,
+        EMAIL VARCHAR(50) NOT NULL,
+        SLOT INT NOT NULL,
+        USER_ID INT REFERENCES USERS(ID)
+        )
+        """
+        cur.execute(sqlUser)
+        cur.execute(sqlRide)
+        con.commit()
+    except psycopg2.Error as e:
+        con.rollback()
+        return({e.pgcode: e.pgerror}, 500)
+
+    try:
+        cur = con.cursor()
         sql = "SELECT * FROM users WHERE EMAIL='{}'".format(email)
         cur.execute(sql)
         item = cur.fetchall()
@@ -44,6 +102,34 @@ def emailExist(email):
 
 
 def loginUser(email, password):
+    try:
+        cur = con.cursor()
+        sqlUser = """CREATE TABLE IF NOT EXISTS users(
+        ID SERIAL PRIMARY KEY,
+        FIRSTNAME VARCHAR(50) NOT NULL,
+        LASTNAME VARCHAR(50) NOT NULL,
+        EMAIL VARCHAR(80) NOT NULL,
+        BIRTHDATE VARCHAR(50) NOT NULL,
+        LOCATION VARCHAR(50) NOT NULL,
+        PASSWORD VARCHAR(80) NOT NULL);
+        """
+        sqlRide="""
+        CREATE TABLE IF NOT EXISTS rides(
+        ID SERIAL PRIMARY KEY,
+        START VARCHAR(50) NOT NULL,
+        FINISH VARCHAR(50) NOT NULL,
+        DEPARTURE_DATE VARCHAR(50) NOT NULL,
+        EMAIL VARCHAR(50) NOT NULL,
+        SLOT INT NOT NULL,
+        USER_ID INT REFERENCES USERS(ID)
+        )
+        """
+        cur.execute(sqlUser)
+        cur.execute(sqlRide)
+        con.commit()
+    except psycopg2.Error as e:
+        con.rollback()
+        return({e.pgcode: e.pgerror}, 500)
     try:
         cur = con.cursor()
         sql = "SELECT   password FROM users WHERE email='{}'".format(email)
@@ -61,6 +147,34 @@ def loginUser(email, password):
 
 
 def postRide(data):
+    try:
+        cur = con.cursor()
+        sqlUser = """CREATE TABLE IF NOT EXISTS users(
+        ID SERIAL PRIMARY KEY,
+        FIRSTNAME VARCHAR(50) NOT NULL,
+        LASTNAME VARCHAR(50) NOT NULL,
+        EMAIL VARCHAR(80) NOT NULL,
+        BIRTHDATE VARCHAR(50) NOT NULL,
+        LOCATION VARCHAR(50) NOT NULL,
+        PASSWORD VARCHAR(80) NOT NULL);
+        """
+        sqlRide="""
+        CREATE TABLE IF NOT EXISTS rides(
+        ID SERIAL PRIMARY KEY,
+        START VARCHAR(50) NOT NULL,
+        FINISH VARCHAR(50) NOT NULL,
+        DEPARTURE_DATE VARCHAR(50) NOT NULL,
+        SLOT INT NOT NULL,
+        USER_ID INT REFERENCES USERS(ID)
+        )
+        """
+        cur.execute(sqlUser)
+        cur.execute(sqlRide)
+        con.commit()
+    except psycopg2.Error as e:
+        con.rollback()
+        return({e.pgcode: e.pgerror}, 500)
+
     try:
         cur = con.cursor()
         slq_id = "SELECT id FROM users WHERE email = '{}'".format(data['user_email'])
