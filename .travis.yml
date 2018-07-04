@@ -5,7 +5,7 @@ python:
   - "3.5.2"
 
 services:
-  - postgres
+  - postgresql
 
 install:
   - pip install -r requirements.txt
@@ -14,7 +14,6 @@ before_script:
   - psql -c "create database ride;"
   - psql -c "create user danti with password 'python';"
   - psql -c  "grant all privileges on database ride to danti;"
-  - cp database.yml.travis config/database.yml
 
 script:
   - "coveralls"
