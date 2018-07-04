@@ -3,7 +3,7 @@ import datetime
 from ..db.db import *
 
 
-class CheckDate:
+class CheckData:
     """
     class contains methods for data validation
     """
@@ -56,16 +56,16 @@ class CheckDate:
             return(False)
 
 
-class Register(CheckDate):
+class Register(CheckData):
     """
     This class add user data to the database
     """
     def __init__(self, data):
         self.data = data
-        self.WhiteSpace = CheckDate.checkWhiteSpace(self, self.data)
-        self.empty = CheckDate.checkEmptyData(self, self.data)
-        self.email = CheckDate.checkEmail(self, self.data)
-        self.date = CheckDate.CheckDate(self, self.data)
+        self.WhiteSpace = CheckData.checkWhiteSpace(self, self.data)
+        self.empty = CheckData.checkEmptyData(self, self.data)
+        self.email = CheckData.checkEmail(self, self.data)
+        self.date = CheckData.CheckDate(self, self.data)
         self.emailExist = emailExist(self.data['email'])
 
     def uploadData(self):
