@@ -32,7 +32,7 @@ class SignUpTest(unittest.TestCase):
         'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
         'birthDate': '2-3-2018',
-        'Location': 'kasarani',
+        'location': 'kasarani',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
@@ -50,7 +50,7 @@ class SignUpTest(unittest.TestCase):
         'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
         'birthDate': '2-3-2018',
-        'Location': 'kasarani',
+        'location': 'kasarani',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
@@ -68,7 +68,7 @@ class SignUpTest(unittest.TestCase):
         'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
         'birthDate': '',
-        'Location': 'kasarani',
+        'location': 'kasarani',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
@@ -86,7 +86,7 @@ class SignUpTest(unittest.TestCase):
         'lastName': 'Asiago',
         'email': '',
         'birthDate': '2-3-2018',
-        'Location': 'kasarani',
+        'location': 'kasarani',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
@@ -95,16 +95,16 @@ class SignUpTest(unittest.TestCase):
         data = json.loads(response.get_data().decode('utf-8'))
         self.assertEqual(data['result'], 'Invalid input (Empty data)')
 
-    def testEmptyLocation(self):
+    def testEmptylocation(self):
         """
-        test if string is empty Location
+        test if string is empty location
         """
         location = {
         'firstName': 'kwame',
         'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
         'birthDate': '2/3/2018',
-        'Location': '',
+        'location': '',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
@@ -115,14 +115,14 @@ class SignUpTest(unittest.TestCase):
 
     def testEmptyPassword(self):
         """
-        test if string is empty Location
+        test if string is empty location
         """
         password = {
         'firstName': 'kwame',
         'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
         'birthDate': '2-3-2018',
-        'Location': 'kasarani',
+        'location': 'kasarani',
         'password': ''
         }
         response = self.test.post('/auth/signup',
@@ -158,7 +158,7 @@ class SignUpTest(unittest.TestCase):
         'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
         'birthDate': '2-37-2018',
-        'Location': 'kasarani',
+        'location': 'kasarani',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
@@ -176,7 +176,7 @@ class SignUpTest(unittest.TestCase):
         'lastName': 'Asiago',
         'email': 'kwame@gmail.com',
         'birthDate': '2-3-2018',
-        'Location': 'kasarani',
+        'location': 'kasarani',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
@@ -194,7 +194,7 @@ class SignUpTest(unittest.TestCase):
         'lastName': ' ',
         'email': 'kwame@gmail.com',
         'birthDate': '2-3-2018',
-        'Location': 'kasarani',
+        'location': 'kasarani',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
@@ -212,7 +212,7 @@ class SignUpTest(unittest.TestCase):
         'lastName': 'Asiago',
         'email': 'johndoe@gmail.com',
         'birthDate': '2-3-2018',
-        'Location': 'kasarani',
+        'location': 'kasarani',
         'password': 'password'
         }
         response = self.test.post('/auth/signup',
