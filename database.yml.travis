@@ -1,0 +1,5 @@
+postgres:
+  adapter: postgresql
+  database: ride
+  username: prostgres
+  password: python
