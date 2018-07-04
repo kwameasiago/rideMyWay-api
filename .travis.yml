@@ -5,14 +5,14 @@ python:
   - "3.5.2"
 
 services:
-  - postgres
+  - postgresql
 
 install:
   - pip install -r requirements.txt
 
 before_script:
   - psql -c 'create database ride'
-  - cp config/database.yml.travis config/database.yml
+  - cp database.yml.travis config/database.yml
 
 script:
   - "coveralls"
