@@ -5,7 +5,7 @@ from app.views.views import app
 
 class TestAddRequest(unittest.TestCase):
 	def setUp(self):
-		self.access_token = 
+		self.access_token = 'placeholder for token'
 		self.headers = {'Content-type': 'application/json', 'Authorization': 'Bearer '+ access_token}
 		self.test = app.test_client()
 		self.requestData = {
