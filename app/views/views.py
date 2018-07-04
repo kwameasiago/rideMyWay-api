@@ -47,7 +47,7 @@ def token_required(f):
         if 'X-API-KEY' in request.headers:
             token = request.headers['X-API-KEY']
         if not token:
-            return({'result': 'token is missing'})
+            return({'result': 'token is missing'},401)
         try:
             tokenData = jwt.decode(token, app.config['SECRET_KEY'])
         except:

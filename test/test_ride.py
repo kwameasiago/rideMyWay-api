@@ -1,5 +1,7 @@
 import unittest
 import json
+import jwt
+import datetime
 from app.views.views import app
 
 
@@ -9,12 +11,15 @@ class TestAddRide(unittest.TestCase):
     """
     def setUp(self):
         self.test = app.test_client()
-        self.headers = {'Content-type':'application/json'}
+        self.login = {'email': 'johndoe@gmail.com','password':'string'}
+        self.response = self.test.post('/auth/login',headers = {'Content-type': 'application/json'}, data=json.dumps(self.login))
+        self.data = json.loads(self.response.get_data().decode('utf-8'))
+        self.headers = {'Authorization': 'Bearer '+ self.data}
         self.userData = {
         'start': 'kahawa',
         'finish': 'mwiki',
         'date': '1-2-2018',
-        'slots': 4,
+        'slot': 4,
         'email': 'john@gmail.com',
         'time': '12:30:PM'
         }
@@ -30,115 +35,122 @@ class TestAddRide(unittest.TestCase):
         'start': '',
         'finish': 'mwiki',
         'date': '1-2-2018',
-        'slots': 4,
+        'slot': 4,
         'email': 'john@gmail.com',
         'time': '12:30:PM'
         }
         response = self.test.post('/users/rides', headers=self.headers,
-            data=json.dumps(self.userData))
+            data=json.dumps(emptyStart))
         data = json.loads(response.get_data().decode('utf-8'))
-        self.assertEqual(response.status_code, 405)
+        #self.assertEqual(response.status_code, 405)
+        self.assertIn('error',data)
+        print(self.token)
 
 
     def testEmptyFinish(self):
-        emptyStart = {
+        emptyFinish = {
         'start': 'kahawa',
         'finish': '',
         'date': '1-2-2018',
-        'slots': 4,
+        'slot': 4,
         'email': 'john@gmail.com',
         'time': '12:30:PM'
         }
         response = self.test.post('/users/rides', headers=self.headers,
-            data=json.dumps(self.userData))
+            data=json.dumps(emptyFinish))
         data = json.loads(response.get_data().decode('utf-8'))
-        self.assertEqual(response.status_code, 405)
+        #self.assertEqual(response.status_code, 405)
+        self.assertIn('error',data)
 
 
     def testEmptyDate(self):
-        emptyStart = {
+        emptyDate = {
         'start': 'kahawa',
         'finish': 'mwiki',
         'date': '',
-        'slots': 4,
+        'slot': 4,
         'email': 'john@gmail.com',
         'time': '12:30:PM'
         }
         response = self.test.post('/users/rides', headers=self.headers,
-            data=json.dumps(self.userData))
+            data=json.dumps(emptyDate))
         data = json.loads(response.get_data().decode('utf-8'))
-        self.assertEqual(response.status_code, 405)
+        #self.assertEqual(response.status_code, 405)
+        self.assertIn('error',data)
 
 
     def testSlot(self):
-        emptyStart = {
+        testSlot = {
         'start': 'kahawa',
         'finish': 'mwiki',
         'date': '1-2-2018',
-        'slots': -4,
+        'slot': -4,
         'email': 'john@gmail.com',
         'time': '12:30:PM'
         }
         response = self.test.post('/users/rides', headers=self.headers,
-            data=json.dumps(self.userData))
+            data=json.dumps(testSlot))
         data = json.loads(response.get_data().decode('utf-8'))
-
-        self.assertEqual(response.status_code, 405)
+        #self.assertEqual(response.status_code, 405)
+        self.assertIn('error',data)
 
     def testEmail(self):
-        emptyStart = {
+        testEmail = {
         'start': 'kahawa',
         'finish': 'mwiki',
         'date': '1-2-2018',
-        'slots': 4,
+        'slot': 4,
         'email': 'johngmailco',
         'time': '12:30:PM'
         }
-        response = self.test.post('/users/rides', headers=dict(Authorization='Bearer ' + access_token),
-            data=json.dumps(self.userData))
+        response = self.test.post('/users/rides', headers=self.headers,
+            data=json.dumps(testEmail))
         data = json.loads(response.get_data().decode('utf-8'))
         token = json.loads(response.data.decode('utf-8'))
-        self.assertEqual(response.status_code, 405)
-        self.assertEqual(response.data, 405)
+        #self.assertEqual(response.status_code, 405)
+        self.assertIn('error', data)
 
     def testTime(self):
-        emptyStart = {
+        testTime = {
         'start': '',
         'finish': 'mwiki',
         'date': '1-2-2018',
-        'slots': 4,
+        'slot': 4,
         'email': 'john@gmail.com',
         'time': '132:330:PM'
         }
         response = self.test.post('/users/rides', headers=self.headers,
-            data=json.dumps(self.userData))
+            data=json.dumps(testTime))
         data = json.loads(response.get_data().decode('utf-8'))
-        self.assertEqual(response.status_code, 405)
+        #self.assertEqual(response.status_code, 405)
+        self.assertIn('error',data)
 
     def testSpaceStart(self):
-        emptyStart = {
+        testSpaceStart = {
         'start': '    ',
         'finish': 'mwiki',
         'date': '1-2-2018',
-        'slots': 4,
+        'slot': 4,
         'email': 'john@gmail.com',
         'time': '12:30:PM'
         }
         response = self.test.post('/users/rides', headers=self.headers,
-            data=json.dumps(self.userData))
+            data=json.dumps(testSpaceStart))
         data = json.loads(response.get_data().decode('utf-8'))
-        self.assertEqual(response.status_code, 405)
+        #self.assertEqual(response.status_code, 405)
+        self.assertIn('error',data)
 
     def testSpaceFinish(self):
-        emptyStart = {
+        testSpaceFinish = {
         'start': 'kahawa',
         'finish': '   ',
         'date': '1-2-2018',
-        'slots': 4,
+        'slot': 4,
         'email': 'john@gmail.com',
         'time': '12:30:PM'
         }
         response = self.test.post('/users/rides', headers=self.headers,
-            data=json.dumps(self.userData))
+            data=json.dumps(testSpaceFinish))
         data = json.loads(response.get_data().decode('utf-8'))
-        self.assertEqual(response.status_code, 405)
+        #self.assertEqual(response.status_code, 405)
+        self.assertIn('error',data)
