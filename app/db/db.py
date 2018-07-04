@@ -83,14 +83,21 @@ def postRide(data):
 
 
 def getAllRides():
-    try:
-        cur = con.cursor()
-        sql = "SELECT * FROM rides"
-        cur.execute(sql)
-        allRides = cur.fetchall()
-        return allRides
-    except TypeError:
-        return{'result':'no ride found'}, 404
+    cur = con.cursor()
+    sql = "SELECT start, finish, slot, email, departure_date FROM rides"
+    cur.execute(sql)
+    rides = cur.fetchall()
+    allRides = []
+    i = 0
+    while (i<len(rides)):
+        allRides.append({
+            'start': rides[i][0],
+            'finish': rides[i][1],
+            'slot':rides[i][2],
+            'email': rides[i][3],
+            'departure_date': rides[i][4]})
+        i = i + 1
+    return allRides
 
 
 # get one ride

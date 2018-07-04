@@ -38,12 +38,16 @@ class CheckUserData:
 
 
 class Login(CheckUserData):
+    """
+    This class Checks login credentials and if met return Tocken 
+    """
     def __init__(self, data):
         self.data = data
         self.WhiteSpace = CheckUserData.checkWhiteSpace(self, self.data)
         self.empty = CheckUserData.checkEmptyData(self, self.data)
         self.email = CheckUserData.checkEmail(self, self.data)
         self.loginUser = loginUser(self.data['email'], self.data['password'])
+
 
     def uploadData(self, token):
         if self.WhiteSpace is not False:
