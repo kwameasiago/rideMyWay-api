@@ -232,3 +232,13 @@ def getOneRide(rideId):
         return oneRide
     except IndexError:
         return{'result':'ride not found'}, 404
+
+def deleteUsers():
+    try:
+        sql="TRUNCATE TABLE users CASCADE;"
+        cur = con.cursor()
+        cur.execute(sql)
+        con.commit()
+    except psycopg2.Error as e:
+        con.rollback()
+        return({e.pgcode: e.pgerror}, 500)

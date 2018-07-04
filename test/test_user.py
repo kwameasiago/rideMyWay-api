@@ -1,6 +1,7 @@
 import unittest
 import json
 from app.views.views import app
+from app.db.db import con,deleteUsers
 
 
 class SignUpTest(unittest.TestCase):
@@ -17,11 +18,15 @@ class SignUpTest(unittest.TestCase):
         'password': 'password'}
         self.test = app.test_client()
         self.headers = {'Content-type': 'application/json'}
+        self.cleanUser = deleteUsers()
 
     def tearDown(self):
         self.userData = None
         self.test = None
         self.headers = None
+        self.cleanUser = None
+
+
 
     def testEmptyfirstName(self):
         """
@@ -203,23 +208,16 @@ class SignUpTest(unittest.TestCase):
         data = json.loads(response.get_data().decode('utf-8'))
         self.assertEqual(data['result'], 'Invalid input(Only whitespace)')
 
-    def testExist(self):
-        """
-        test if user exist
-        """
-        exist = {
-        'firstName': 'ka',
-        'lastName': 'Asiago',
-        'email': 'johndoe@gmail.com',
-        'birthDate': '2-3-2018',
-        'location': 'kasarani',
-        'password': 'password'
-        }
-        response = self.test.post('/auth/signup',
-            headers=self.headers, data=json.dumps(exist))
-        self.assertEqual(response.status_code, 405)
+    def testSignUpSignIn(self):
+        response = self.test.post('/auth/signup', headers=self.headers, data=json.dumps(self.userData))
+        self.assertEqual(response.status_code,200)
         data = json.loads(response.get_data().decode('utf-8'))
-        self.assertEqual(data['result'], 'Email already exist')
+        self.assertEqual(data['result'],'account created')
+        responseLogin = self.test.post('/auth/login',headers=self.headers,
+            data=json.dumps({'email':'kwam@gmail.com','password':'password'}))
+        data = json.loads(responseLogin.get_data().decode('utf-8'))
+        self.assertEqual(responseLogin.status_code,200)
+        self.cleanUser
 
 
 class SignInTest(unittest.TestCase):

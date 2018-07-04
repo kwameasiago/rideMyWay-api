@@ -57,6 +57,6 @@ class Login(CheckUserData):
         elif self.email is not False:
             return(self.email)
         elif self.loginUser is True:
-            return({'Use token:-': token}, 201)
+            return({'Use token:-': token}, 200)
         else:
             return(self.loginUser)
