@@ -4,6 +4,9 @@ from ..db.db import *
 
 
 class CheckRideData:
+    """
+    This class contains method to check for correct ride data format
+    """
     def __init__(self):
         self.dataErr = None
 
@@ -73,6 +76,9 @@ class CheckRideData:
 
 
 class AddRide(CheckRideData):
+    """
+    This class Add the rides data to the database
+    """
     def __init__(self, data):
         self.data = data
         self.checkWhiteSpace = CheckRideData.checkWhiteSpace(self, self.data)
@@ -81,6 +87,7 @@ class AddRide(CheckRideData):
         self.CheckDate = CheckRideData.CheckDate(self, self.data)
         self.CheckLocation = CheckRideData.CheckLocation(self, self.data)
         self.CheckSlots = CheckRideData.CheckSlots(self, self.data)
+
 
     def UploadData(self):
         if self.checkEmptyData is not False:
@@ -97,3 +104,7 @@ class AddRide(CheckRideData):
             return self.CheckSlots
         else:
             return postRide(self.data)
+
+
+    def __repr__(self):
+        return('AddRide ({})').format(self.data)

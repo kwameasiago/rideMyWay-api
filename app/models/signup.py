@@ -57,6 +57,9 @@ class CheckDate:
 
 
 class Register(CheckDate):
+    """
+    This class add user data to the database
+    """
     def __init__(self, data):
         self.data = data
         self.WhiteSpace = CheckDate.checkWhiteSpace(self, self.data)

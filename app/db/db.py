@@ -77,3 +77,47 @@ def postRide(data):
     except psycopg2.Error as e:
         con.rollback()
         return({e.pgcode: e.pgerror}, 500)
+<<<<<<< Updated upstream
+=======
+
+
+# get all rides
+
+
+def getAllRides():
+    cur = con.cursor()
+    sql = "SELECT start, finish, slot, email, departure_date FROM rides"
+    cur.execute(sql)
+    rides = cur.fetchall()
+    allRides = []
+    i = 0
+    while (i<len(rides)):
+        allRides.append({
+            'start': rides[i][0],
+            'finish': rides[i][1],
+            'slot':rides[i][2],
+            'email': rides[i][3],
+            'departure_date': rides[i][4]})
+        i = i + 1
+    return allRides
+
+
+# get one ride
+
+
+def getOneRide(rideId):
+    try:
+        cur = con.cursor()
+        sql = "SELECT start, finish, slot, email, departure_date FROM rides WHERE id={}".format(rideId)
+        cur.execute(sql)
+        oneRide = cur.fetchall()
+        oneRide = {
+        'start': oneRide[0][0],
+        'finish': oneRide[0][1],
+        'slot': oneRide[0][2],
+        'email': oneRide[0][3],
+        'departure_date': oneRide[0][4]}
+        return oneRide
+    except TypeError:
+        return{'result':'ride not found'}, 404
+>>>>>>> Stashed changes

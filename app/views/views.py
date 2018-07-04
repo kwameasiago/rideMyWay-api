@@ -117,7 +117,7 @@ class PostRide(Resource):
         tokenData = jwt.decode(token, app.config['SECRET_KEY'])
         data['user_email'] = tokenData['user']
         add = AddRide(data)
-        return(add.Upload())
+        return(add.UploadData())
 
 
 @api.route('/rides/<rideId>/requests')
