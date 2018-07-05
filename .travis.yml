@@ -17,7 +17,7 @@ before_script:
 
 script:
   - "coveralls"
-  - py.test
+  - pytest
 
 after_success:
 - "coveralls"
