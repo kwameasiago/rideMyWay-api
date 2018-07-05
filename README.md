@@ -66,3 +66,6 @@ Kwame Asiago
 
 
 
+[![Build Status](https://travis-ci.org/SelaDanti/rideMyWay-api.svg?branch=users-and-request-158826392)](https://travis-ci.org/SelaDanti/rideMyWay-api)
+
+[![Coverage Status](https://coveralls.io/repos/github/SelaDanti/rideMyWay-api/badge.svg)](https://coveralls.io/github/SelaDanti/rideMyWay-api)
