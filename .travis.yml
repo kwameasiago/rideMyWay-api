@@ -1,15 +1,23 @@
 language: python
 
 python:
-  - "2.7.12"
   - "3.5.2"
+
+services:
+  - postgresql
 
 install:
   - pip install -r requirements.txt
 
+env:
+  - DB = postgres USER = postgres PASSWORD = 'python'
+
+before_script:
+  - psql -c "CREATE DATABASE ride;" -U postgres
+
 script:
   - "coveralls"
-  - py.test
+  - pytest
 
 after_success:
 - "coveralls"
