@@ -38,6 +38,12 @@ rides = api.model('rides', {
     'email': fields.String,
     'departureDate': fields.String
     })
+bookRide = api.model('bookRide',{
+    'start':fields.String,
+    'finish':fields.String,
+    'time': fields.String,
+    'contact': fields.String
+    })
 
 
 def token_required(f):
@@ -77,7 +83,9 @@ class LogIn(Resource):
     def post(self):
         data = request.get_json()
         signin = Login(data)
-        token = jwt.encode({'user': data['email'], 'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=240)}, app.config['SECRET_KEY'])
+        token = jwt.encode({'user': data['email'],
+            'exp': datetime.datetime.utcnow()+datetime.timedelta(minutes=240)},
+            app.config['SECRET_KEY'])
         token = token.decode('UTF-8')
         return(signin.uploadData(token))
 
@@ -126,10 +134,12 @@ class PostRequest(Resource):
     """
     class to post a ride request
     """
+    @api.expect(bookRide)
     @api.doc(security='apikey')
     @token_required
-    def post(self):
-        return({'result': 'testing'})
+    def post(self,rideId):
+        data = request.get_json()
+        return(data)
 
 
 @api.route('/users/rides/<rideId>/requests')

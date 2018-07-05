@@ -38,4 +38,4 @@ class uploadRequest(checkRequestData):
         elif self.checkWhiteSpace is not False:
             return self.checkWhiteSpace
         else:
-        	pass
+        	return {'':''}
