@@ -6,7 +6,7 @@ from app.views.views import app
 class TestAddRequest(unittest.TestCase):
 	def setUp(self):
 		self.access_token = 'placeholder for token'
-		self.headers = {'Content-type': 'application/json', 'Authorization': 'Bearer '+ access_token}
+		self.headers = {'Content-type': 'application/json', 'Authorization': 'Bearer '+ self.access_token}
 		self.test = app.test_client()
 		self.requestData = {
 		'start': 'kahawa west',
@@ -28,7 +28,7 @@ class TestAddRequest(unittest.TestCase):
 		response = self.test.post('/users/rides',headers=self.headers,data=json.dumps(self.requestData))
 		self.assertEqual(response.status_code,401)
 		data = json.loads(response.get_data().decode('utf-8'))
-		self.assertEqual(data['result'],'sd')
+		self.assertEqual(response.status_code,405)
 
 	def testEmptyStart(self):
 		"""

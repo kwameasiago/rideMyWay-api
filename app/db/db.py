@@ -47,7 +47,7 @@ def insertUser(data):
         "('{}', '{}', '{}', '{}', '{}', '{}')".format(firstName, lastName, email, location, birthDate, newPassword)
         cur.execute(sql)
         con.commit()
-        return({'result': 'account created'})
+        return({'result': 'account created'},201)
     except psycopg2.Error as e:
         con.rollback()
         return({e.pgcode: e.pgerror}, 500)

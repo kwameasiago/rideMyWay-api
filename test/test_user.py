@@ -24,7 +24,7 @@ class SignUpTest(unittest.TestCase):
         self.userData = None
         self.test = None
         self.headers = None
-        self.cleanUser = None
+        self.cleanUser
 
 
 
@@ -210,14 +210,14 @@ class SignUpTest(unittest.TestCase):
 
     def testSignUpSignIn(self):
         response = self.test.post('/auth/signup', headers=self.headers, data=json.dumps(self.userData))
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code,201)
         data = json.loads(response.get_data().decode('utf-8'))
         self.assertEqual(data['result'],'account created')
         responseLogin = self.test.post('/auth/login',headers=self.headers,
             data=json.dumps({'email':'kwam@gmail.com','password':'password'}))
         data = json.loads(responseLogin.get_data().decode('utf-8'))
         self.assertEqual(responseLogin.status_code,200)
-        self.cleanUser
+        
 
 
 class SignInTest(unittest.TestCase):
