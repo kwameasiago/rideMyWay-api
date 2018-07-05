@@ -44,7 +44,8 @@ def insertUser(data):
         cur = con.cursor()
         sql = "INSERT INTO users "\
         "(firstName, lastName, email, location, birthDate, password) VALUES "\
-        "('{}', '{}', '{}', '{}', '{}', '{}')".format(firstName, lastName, email, location, birthDate, newPassword)
+        "('{}', '{}', '{}', '{}', '{}', '{}')".format(firstName, 
+            lastName, email, location, birthDate, newPassword)
         cur.execute(sql)
         con.commit()
         return({'result': 'account created'},201)
@@ -198,7 +199,7 @@ def postRide(data):
 
 def getAllRides():
     cur = con.cursor()
-    sql = "SELECT start, finish, slot, email, departure_date FROM rides"
+    sql = "SELECT start, finish, slot, email, departure_date, id FROM rides"
     cur.execute(sql)
     rides = cur.fetchall()
     allRides = []
@@ -209,9 +210,13 @@ def getAllRides():
             'finish': rides[i][1],
             'slot':rides[i][2],
             'email': rides[i][3],
-            'departure_date': rides[i][4]})
+            'departure_date': rides[i][4],
+            'id':rides[i][5]})
         i = i + 1
-    return allRides
+    if len(allRides) == 0:
+        return{'result':'No rides found'},404
+    else:
+        return allRides
 
 
 # get one ride
