@@ -16,8 +16,8 @@ before_script:
   - psql -c "CREATE DATABASE ride;" -U postgres
 
 script:
-  - "coveralls"
-  - pytest
+  - nosetests  --with-coverage --cover-package=app && coveralls
+   - py.test
 
 after_success:
 - "coveralls"
