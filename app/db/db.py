@@ -24,14 +24,26 @@ def insertUser(data):
         ID SERIAL PRIMARY KEY,
         START VARCHAR(50) NOT NULL,
         FINISH VARCHAR(50) NOT NULL,
-        DEPARTURE_DATE VARCHAR(50) NOT NULL,
         EMAIL VARCHAR(50) NOT NULL,
+        DEPARTURE_DATE VARCHAR(50) NOT NULL,
         SLOT INT NOT NULL,
         USER_ID INT REFERENCES USERS(ID)
-        )
+        );
+        """
+        sqlRequest = """
+        CREATE TABLE IF NOT EXISTS requests(
+        ID SERIAL PRIMARY KEY,
+        START VARCHAR(50) NOT NULL,
+        FINISH VARCHAR(50) NOT NULL,
+        FRIENDS VARCHAR(50) NOT NULL,
+        STATUS VARCHAR(50) NOT NULL,
+        USER_ID INT REFERENCES USERS(ID),
+        RIDE_ID INT REFERENCES RIDES(ID)
+        );
         """
         cur.execute(sqlUser)
         cur.execute(sqlRide)
+        cur.execute(sqlRequest)
         con.commit()
     except psycopg2.Error as e:
         con.rollback()
@@ -74,14 +86,26 @@ def emailExist(email):
         ID SERIAL PRIMARY KEY,
         START VARCHAR(50) NOT NULL,
         FINISH VARCHAR(50) NOT NULL,
-        DEPARTURE_DATE VARCHAR(50) NOT NULL,
         EMAIL VARCHAR(50) NOT NULL,
+        DEPARTURE_DATE VARCHAR(50) NOT NULL,
         SLOT INT NOT NULL,
         USER_ID INT REFERENCES USERS(ID)
-        )
+        );
+        """
+        sqlRequest = """
+        CREATE TABLE IF NOT EXISTS requests(
+        ID SERIAL PRIMARY KEY,
+        START VARCHAR(50) NOT NULL,
+        FINISH VARCHAR(50) NOT NULL,
+        FRIENDS VARCHAR(50) NOT NULL,
+        STATUS VARCHAR(50) NOT NULL,
+        USER_ID INT REFERENCES USERS(ID),
+        RIDE_ID INT REFERENCES RIDES(ID)
+        );
         """
         cur.execute(sqlUser)
         cur.execute(sqlRide)
+        cur.execute(sqlRequest)
         con.commit()
     except psycopg2.Error as e:
         con.rollback()
@@ -119,15 +143,30 @@ def loginUser(email, password):
         ID SERIAL PRIMARY KEY,
         START VARCHAR(50) NOT NULL,
         FINISH VARCHAR(50) NOT NULL,
-        DEPARTURE_DATE VARCHAR(50) NOT NULL,
         EMAIL VARCHAR(50) NOT NULL,
+        DEPARTURE_DATE VARCHAR(50) NOT NULL,
         SLOT INT NOT NULL,
         USER_ID INT REFERENCES USERS(ID)
-        )
+        );
+        """
+        sqlRequest = """
+        CREATE TABLE IF NOT EXISTS requests(
+        ID SERIAL PRIMARY KEY,
+        START VARCHAR(50) NOT NULL,
+        FINISH VARCHAR(50) NOT NULL,
+        FRIENDS VARCHAR(50) NOT NULL,
+        STATUS VARCHAR(50) NOT NULL,
+        USER_ID INT REFERENCES USERS(ID),
+        RIDE_ID INT REFERENCES RIDES(ID)
+        );
         """
         cur.execute(sqlUser)
         cur.execute(sqlRide)
+        cur.execute(sqlRequest)
         con.commit()
+    except psycopg2.Error as e:
+        con.rollback()
+        return({e.pgcode: e.pgerror}, 500)
     except psycopg2.Error as e:
         con.rollback()
         return({e.pgcode: e.pgerror}, 500)
@@ -164,14 +203,30 @@ def postRide(data):
         ID SERIAL PRIMARY KEY,
         START VARCHAR(50) NOT NULL,
         FINISH VARCHAR(50) NOT NULL,
+        EMAIL VARCHAR(50) NOT NULL,
         DEPARTURE_DATE VARCHAR(50) NOT NULL,
         SLOT INT NOT NULL,
         USER_ID INT REFERENCES USERS(ID)
-        )
+        );
+        """
+        sqlRequest = """
+        CREATE TABLE IF NOT EXISTS requests(
+        ID SERIAL PRIMARY KEY,
+        START VARCHAR(50) NOT NULL,
+        FINISH VARCHAR(50) NOT NULL,
+        FRIENDS VARCHAR(50) NOT NULL,
+        STATUS VARCHAR(50) NOT NULL,
+        USER_ID INT REFERENCES USERS(ID),
+        RIDE_ID INT REFERENCES RIDES(ID)
+        );
         """
         cur.execute(sqlUser)
         cur.execute(sqlRide)
+        cur.execute(sqlRequest)
         con.commit()
+    except psycopg2.Error as e:
+        con.rollback()
+        return({e.pgcode: e.pgerror}, 500)
     except psycopg2.Error as e:
         con.rollback()
         return({e.pgcode: e.pgerror}, 500)
@@ -244,6 +299,75 @@ def deleteUsers():
         cur = con.cursor()
         cur.execute(sql)
         con.commit()
+    except psycopg2.Error as e:
+        con.rollback()
+        return({e.pgcode: e.pgerror}, 500)
+
+
+def insertRequest(data):
+    try:     
+        #get id(ride and euse)
+        cur = con.cursor()
+        slq_id = "SELECT id FROM users WHERE email = '{}'".format(data['email'])
+        cur.execute(slq_id)
+        userId = cur.fetchone()
+        userId = userId[0]
+        rideId = data['rideId']
+
+        #insert request
+        start, finish, status = data['start'], data['finish'], data['status']
+        friends = data['friends']
+        sql = "INSERT INTO requests"\
+        "(start, finish, status, friends, user_id, ride_id)"\
+        "VALUES"\
+        "('{}','{}','{}','{}',{},{})".format(start,finish,status,friends,userId,rideId)
+        cur = con.cursor()
+        cur.execute(sql)
+        con.commit()
+        return{'result':'request sent'}
+    except psycopg2.Error as e:
+        con.rollback()
+        return({'result': 'Error Ride does not exist'}, 404)
+
+
+def getAllRequest(rideId):
+    try:
+        cur = con.cursor()
+        sql = "SELECT id, start, finish, friends, status, user_id, ride_id FROM requests WHERE ride_id='{}'".format(rideId)
+        cur.execute(sql)
+        items = cur.fetchall()
+        allRequest = []
+        i = 0
+        while (i < len(items)):
+            allRequest.append({
+                'id':items[i][0],
+                'start':items[i][1],
+                'finish': items[i][2],
+                'friends': int(items[i][3]),
+                'status': items[i][4],
+                'user_id': items[i][5],
+                'ride_id':items[i][6]
+                })
+            i = i+1
+        if len(allRequest) == 0:
+            return{'result':'No rides found'},404
+        else:
+            return allRequest
+    except psycopg2.Error as e:
+        con.rollback()
+        return({'result': 'Error Ride does not exist'}, 404)
+
+
+def updateRequest(status,rideId,requestId):
+    try:
+        if status == 'accept' or status == 'reject':
+            cur = con.cursor()
+            sql = "UPDATE requests SET status='{}' WHERE ride_id='{}' AND id='{}'".format(status,rideId,requestId) 
+            cur.execute(sql)
+            con.commit()
+        else:
+            return {'result': 'Invalid (expect accept or reject)'}
+        return{'result':'rides {}'.format(status)}
     except psycopg2.Error as e:
         con.rollback()
         return({e.pgcode: e.pgerror}, 500)

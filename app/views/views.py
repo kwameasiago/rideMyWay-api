@@ -6,7 +6,9 @@ from functools import wraps
 from ..models.signup import Register
 from ..models.signin import Login
 from ..models.ride import AddRide
-from ..db.db import getAllRides, getOneRide
+from ..models.request import UploadRequest
+from ..db.db import getAllRides, getOneRide,getAllRequest, updateRequest
+
 
 app = Flask(__name__)
 authorizations = {
@@ -41,9 +43,10 @@ rides = api.model('rides', {
 bookRide = api.model('bookRide',{
     'start':fields.String,
     'finish':fields.String,
-    'time': fields.String,
-    'contact': fields.String
+    'status': fields.String,
+    'friends': fields.Integer
     })
+status = api.model('status',{'status':fields.String})
 
 
 def token_required(f):
@@ -139,7 +142,12 @@ class PostRequest(Resource):
     @token_required
     def post(self,rideId):
         data = request.get_json()
-        return(data)
+        token = request.headers['X-API-KEY']
+        tokenData = jwt.decode(token, app.config['SECRET_KEY'])
+        data['email'] = tokenData['user']
+        data['rideId'] = rideId
+        bookRide=UploadRequest(data)
+        return(bookRide.uploadData())
 
 
 @api.route('/users/rides/<rideId>/requests')
@@ -149,8 +157,8 @@ class FetchRequest(Resource):
     """
     @api.doc(security='apikey')
     @token_required
-    def get(self):
-        return({'result': 'testing'})
+    def get(self,rideId):
+        return(getAllRequest(rideId))
 
 
 @api.route('/users/rides/<rideId>/requests/<requestId>')
@@ -158,7 +166,9 @@ class PickRequest(Resource):
     """
     class to accept or reject request
     """
+    @api.expect(status)
     @api.doc(security='apikey')
     @token_required
-    def put(self):
-        return({'result': 'testing'})
+    def put(self,rideId,requestId):
+        data = request.get_json()
+        return(updateRequest(data['status'],rideId,requestId))

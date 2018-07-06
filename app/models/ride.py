@@ -63,7 +63,7 @@ class CheckRideData:
             return False
 
     def CheckSlots(self, items):
-        if items['slot'] < 0:
+        if items['slot'] < 1:
             self.dataError = {'result': 'Invalid slot number(less than zero)'}, 405
             return(self.dataError)
         else:
