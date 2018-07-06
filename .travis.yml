@@ -8,6 +8,8 @@ services:
 
 install:
   - pip install -r requirements.txt
+  - pip install coverage
+  - pip install coveralls
 
 env:
   - DB = postgres USER = postgres PASSWORD = 'python'
@@ -17,7 +19,7 @@ before_script:
 
 script:
   - nosetests  --with-coverage --cover-package=app && coveralls
-   - py.test
+   - pytest
 
 after_success:
 - "coveralls"
