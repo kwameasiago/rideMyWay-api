@@ -19,7 +19,7 @@ before_script:
 
 script:
   - nosetests  --with-coverage --cover-package=app && coveralls
-   - pytest
+  - pytest
 
 after_success:
 - "coveralls"
